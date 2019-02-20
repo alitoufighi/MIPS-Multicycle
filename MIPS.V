@@ -302,5 +302,20 @@ input          TD_CLK27;            //	TV Decoder 27MHz CLK
 inout	[35:0]	GPIO_0;					//	GPIO Connection 0
 inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
+wire[31:0] PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10;
+wire[31:0] instruction1, instruction2;
+wire clk, rst;
+assign clk = KEY[2];
+assign rst = SW[3];
+IF_Stage(clk, SW, PC1, instruction1);
+IF_Stage_reg(clk, rst, PC1, instruction1, PC2, instruction2);
+ID_Stage(clk, rst, PC2, PC3);
+ID_Stage_reg(clk, rst, PC3, PC4);
+EXE_Stage(clk, rst, PC4, PC5);
+EXE_Stage_reg(clk, rst, PC5, PC6);
+MEM_Stage(clk, rst, PC6, PC7);
+MEM_Stage_reg(clk, rst, PC7, PC8);
+WB_Stage(clk, rst, PC8, PC9);
+WB_Stage_reg(clk, rst, PC9, PC10);
 	
 endmodule
