@@ -2,8 +2,8 @@ module Registers_file(input clk, rst, input [4:0] src1, src2, dest, input [31:0]
 	reg [31:0] registers[31:0];
 	assign out1 = registers[src1],
 			 out2 = registers[src2];
-	always @(negedge clk, rst) begin
-		if(rst) begin
+	always @(negedge clk, rst) begin : Memory
+		if(rst) begin : RESET
 			integer i;
 			for(i = 0; i < 32; i=i+1) begin
 				registers[i] <= i;

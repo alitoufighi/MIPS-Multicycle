@@ -317,6 +317,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	MEM_Stage_reg(clk, rst, PC7, PC8);
 	WB_Stage(clk, rst, PC8, PC9);
 	WB_Stage_reg(clk, rst, PC9, PC10);
+	
+	// DEBUG SEVEN SEGMENTS
 	seven_segment seven1(PC1[3:0], HEX0);
 	seven_segment seven2(PC3[3:0], HEX1);
 	seven_segment seven3(PC5[3:0], HEX2);
