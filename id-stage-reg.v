@@ -1,8 +1,27 @@
-module ID_Stage_reg(input clk, rst, input[31:0] PC_in, output reg[31:0] PC);
-	always @(posedge clk, posedge rst) begin
-		if(rst)
-			PC <= 32'b0;
-		else
-			PC <= PC_in;
-	end
+module ID_Stage_reg(
+	input clk,
+	input rst,
+	input flush,
+	input [4:0] Dest_in,
+	input [31:0] Reg2_in,
+	input [31:0] Val2_in,
+	input [31:0] Val1_ni,
+	input [31:0] PC_in,
+	input Br_taken_in,
+	input [3:0] EXE_CMD_in,
+	input MEM_R_EN_in,
+	input MEM_W_EN_IN,
+	input WB_EN_in,
+	output reg [4:0] Dest,
+	output reg [31:0] Reg2,
+	output reg [31:0] Val2,
+	output reg [31:0] Val2,
+	output reg [31:0] PC_out,
+	output reg Br_taken,
+	output reg [3:0] EXE_CMD,
+	output reg MEM_R_EN,
+	output reg MEM_W_EN,
+	output reg WB_EN,
+	);
+	
 endmodule

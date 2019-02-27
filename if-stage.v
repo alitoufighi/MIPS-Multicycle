@@ -1,4 +1,11 @@
-module IF_Stage (input clk, rst, output reg[31:0] PC, Instruction);
+module IF_Stage (
+	input clk,
+	input rst,
+	input Br_taken,
+	input [31:0] Br_Addr;
+	output [31:0] PC,
+	output [31:0] Instruction,
+	);
     Instruction_mem instruction_memory(PC, Instruction);
 
     always @(posedge clk, posedge rst) begin
