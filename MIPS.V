@@ -302,14 +302,31 @@ input          TD_CLK27;            //	TV Decoder 27MHz CLK
 inout	[35:0]	GPIO_0;					//	GPIO Connection 0
 inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
+	wire clk, rst;
 	wire[31:0] PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10;
 	wire[31:0] instruction1, instruction2;
-	wire clk, rst;
+	
+	wire id_wb_write_en;
+	wire [4:0] id_wb_dest;
+	wire [31:0] id_wb_data;
+	wire id_if_flush;
+	wire [4:0] id_dest;
+	wire [31:0] id_reg2, id_val2, id_val1;
+	wire id_br_taken;
+	wire [3:0] id_exe_cmd;
+	wire id_mem_r_en, id_mem_w_en, id_wb_en;
+
 	assign clk = KEY[2];
 	assign rst = SW[3];
+
 	IF_Stage(clk, rst, PC1, instruction1);
 	IF_Stage_reg(clk, rst, PC1, instruction1, PC2, instruction2);
-	ID_Stage(clk, rst, PC2, PC3);
+	ID_Stage(.clk(clk), .rst(rst), .Instruction(instruction2),
+			.WB_Write_Enable(id_wb_write_en), .WB_Dest(id_wb_dest),
+			.WB_Data(id_wb_data), .IF_flush(id_if_flush), .Dest(id_dest),
+			.Reg2(id_reg2), .Val2(id_val2), .Val1(id_val1), .Br_taken(id_br_taken), .EXE_CMD(id_exe_cmd),
+			.MEM_R_EN(id_mem_r_en), .MEM_W_EN(id_mem_w_en), .WB_EN(id_wb_en));
+
 	ID_Stage_reg(clk, rst, PC3, PC4);
 	EXE_Stage(clk, rst, PC4, PC5);
 	EXE_Stage_reg(clk, rst, PC5, PC6);
