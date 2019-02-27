@@ -5,7 +5,7 @@ module ID_Stage_reg(
 	input [4:0] Dest_in,
 	input [31:0] Reg2_in,
 	input [31:0] Val2_in,
-	input [31:0] Val1_ni,
+	input [31:0] Val1_in,
 	input [31:0] PC_in,
 	input Br_taken_in,
 	input [3:0] EXE_CMD_in,
