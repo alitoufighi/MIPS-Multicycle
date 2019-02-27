@@ -10,16 +10,16 @@ module ID_Stage(
 	output [31:0] Reg2,
 	output [31:0] Val2,
 	output [31:0] Val1,
-	output Br_taken,
+	output [1:0] Br_type,
 	output [3:0] EXE_CMD,
 	output MEM_R_EN,
 	output MEM_W_EN,
 	output WB_EN
-	);
+);
 	
 	wire is_imm;
 	Control_unit cu(.opcode(Instruction[31:26]),
-			.exec_command(EXE_CMD), .mem_read(MEM_R_EN), .mem_write(MEM_W_EN), .wb_enable(WB_EN), .is_immediate(is_imm), .branch_type(Br_taken));
+			.exec_command(EXE_CMD), .mem_read(MEM_R_EN), .mem_write(MEM_W_EN), .wb_enable(WB_EN), .is_immediate(is_imm), .branch_type(Br_type));
 
 	wire [31:0] RegF1, RegF2;
 	wire [31:0] sign_extended;

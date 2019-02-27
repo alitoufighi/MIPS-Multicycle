@@ -366,18 +366,62 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 		.MEM_W_EN(id_mem_w_en_out),
 		.WB_EN(id_wb_en_out)
 	);
-
-	EXE_Stage(clk, rst, PC4, PC5);
-	EXE_Stage_reg(clk, rst, PC5, PC6);
 	
+/*	EXE_Stage(clk, rst, PC4, PC5);
+	
+	wire exe_wb_en_out;
+	wire exe_mem_r_en_out;
+	wire exe_mem_w_en_out;
+	wire[31:0] exe_alu_result_out;
+	wire[31:0] exe_mem_read_value_out;
+	wire[4:0] exe_dest_out;
+	
+	module EXE_Stage_reg(
+		.clk(clk),
+		.rst(rst),
+		.WB_en_in(),
+		.MEM_R_EN_in(),
+		.MEM_W_EN_in(),
+		.PC_in(),
+		.ALU_result_in(),
+		.ST_val_in(),
+		.Dest_in(),
+		.WB_en(exe_wb_en_out),
+		.MEM_R_EN(exe_mem_r_en_out),
+		.MEM_W_EN(exe_mem_w_en_out),
+		.PC(PC8)
+		.ALU_result(exe_alu_result_out),
+		//.ST_val(),
+		.Dest(exe_dest_out)
+	);
+	
+		input clk,
+	input rst,
+	input WB_en_in,
+	input MEM_R_EN_in,
+	input MEM_W_EN_in,
+	
+	input [31:0] PC_in,
+	input [31:0] ALU_result_in,
+	input [31:0] ST_val_in,
+	input [31:0] Dest_in,
+	
+	output reg WB_en,
+	
+	output reg MEM_R_EN,
+	output reg MEM_W_EN,
+	output reg [31:0] PC,
+	output reg [31:0] ALU_result,
+	output reg [31:0] ST_val,
+	output reg [4:0] Dest
 	wire[31:0] mem_Mem_read_value;
 	MEM_Stage mem_stage(
 		.clk(clk),
-		.MEM_R_EN_in(),
-		.MEM_W_EN_in(),
-		.ALU_result_in(),
+		.MEM_R_EN_in(exe_mem_r_en_out),
+		.MEM_W_EN_in(exe_mem_w_en_out),
+		.ALU_result_in(exe_alu_result_out),
 		.ST_val(),
-		.Mem_read_value(mem_Mem_read_value);
+		.Mem_read_value(mem_Mem_read_value)
 	);
 	
 	MEM_Stage_reg(
@@ -390,7 +434,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	WB_Stage(
 		.clk(clk),
 		.WB_en_in(id_wb_en),
-	input MEM_R_EN,
+		.MEM_R_EN(id_),
 	input [31:0] ALU_result,
 	input [31:0] Mem_read_value,
 	input [4:0] Dest_in,
@@ -398,7 +442,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	output [31:0] Write_value,
 	output [4:0] Dest
 	);
-	
+	*/
 	// DEBUG SEVEN SEGMENTS
 	seven_segment seven1(PC1[3:0], HEX0);
 	seven_segment seven2(PC3[3:0], HEX1);
