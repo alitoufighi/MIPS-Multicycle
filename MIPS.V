@@ -369,10 +369,35 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 	EXE_Stage(clk, rst, PC4, PC5);
 	EXE_Stage_reg(clk, rst, PC5, PC6);
-	MEM_Stage(clk, rst, PC6, PC7);
-	MEM_Stage_reg(clk, rst, PC7, PC8);
-	WB_Stage(clk, rst, PC8, PC9);
 	
+	wire[31:0] mem_Mem_read_value;
+	MEM_Stage mem_stage(
+		.clk(clk),
+		.MEM_R_EN_in(),
+		.MEM_W_EN_in(),
+		.ALU_result_in(),
+		.ST_val(),
+		.Mem_read_value(mem_Mem_read_value);
+	);
+	
+	MEM_Stage_reg(
+		.clk(clk),
+		.rst(rst),
+		.PC_in(PC7),
+		.PC_out(PC8)
+	);
+	
+	WB_Stage(
+		.clk(clk),
+		.WB_en_in(id_wb_en),
+	input MEM_R_EN,
+	input [31:0] ALU_result,
+	input [31:0] Mem_read_value,
+	input [4:0] Dest_in,
+	output WB_en,
+	output [31:0] Write_value,
+	output [4:0] Dest
+	);
 	
 	// DEBUG SEVEN SEGMENTS
 	seven_segment seven1(PC1[3:0], HEX0);
