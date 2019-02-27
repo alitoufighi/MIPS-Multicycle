@@ -303,37 +303,76 @@ inout	[35:0]	GPIO_0;					//	GPIO Connection 0
 inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 	wire clk, rst;
-	wire[31:0] PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10;
-	wire[31:0] instruction1, instruction2;
-	
-	wire id_wb_write_en;
-	wire [4:0] id_wb_dest;
-	wire [31:0] id_wb_data;
-	wire id_if_flush;
-	wire [4:0] id_dest;
-	wire [31:0] id_reg2, id_val2, id_val1;
-	wire id_br_taken;
-	wire [3:0] id_exe_cmd;
-	wire id_mem_r_en, id_mem_w_en, id_wb_en;
-
 	assign clk = KEY[2];
 	assign rst = SW[3];
 
-	IF_Stage(clk, rst, PC1, instruction1);
-	IF_Stage_reg(clk, rst, PC1, instruction1, PC2, instruction2);
-	ID_Stage(.clk(clk), .rst(rst), .Instruction(instruction2),
-			.WB_Write_Enable(id_wb_write_en), .WB_Dest(id_wb_dest),
-			.WB_Data(id_wb_data), .IF_flush(id_if_flush), .Dest(id_dest),
-			.Reg2(id_reg2), .Val2(id_val2), .Val1(id_val1), .Br_taken(id_br_taken), .EXE_CMD(id_exe_cmd),
-			.MEM_R_EN(id_mem_r_en), .MEM_W_EN(id_mem_w_en), .WB_EN(id_wb_en));
+	wire[31:0] if_PC_in, if_pc_out, id_pc_out, PC4, PC5, PC6, PC7, PC8, PC9, PC10;
+	wire[31:0] instruction1, instruction2;
 
-	ID_Stage_reg(clk, rst, PC3, PC4);
+	IF_Stage(clk, rst, if_PC_in, instruction1);
+	IF_Stage_reg(clk, rst, if_PC_in, instruction1, if_pc_out, instruction2);
+
+	wire id_wb_write_en, id_wb_write_en_out;
+	wire [4:0] id_wb_dest, id_wb_dest_out;
+	wire [31:0] id_wb_data, id_wb_data_out;
+	wire id_if_flush, id_if_flush_out;
+	wire [4:0] id_dest, id_dest_out;
+	wire [31:0] id_reg2, id_reg2_out, id_val2, id_val2_out, id_val1, id_val1_out;
+	wire id_br_taken, id_br_taken_out;
+	wire [3:0] id_exe_cmd, id_exe_cmd_out;
+	wire id_mem_r_en, id_mem_r_en_out, id_mem_w_en, id_mem_w_en_out, id_wb_en, id_wb_en_out;
+
+	ID_Stage(
+		.clk(clk),
+		.rst(rst),
+		.Instruction(instruction2),
+		.WB_Write_Enable(id_wb_write_en),
+		.WB_Dest(id_wb_dest),
+		.WB_Data(id_wb_data),
+		.IF_flush(id_if_flush),
+		.Dest(id_dest),
+		.Reg2(id_reg2),
+		.Val2(id_val2),
+		.Val1(id_val1),
+		.Br_taken(id_br_taken),
+		.EXE_CMD(id_exe_cmd),
+		.MEM_R_EN(id_mem_r_en),
+		.MEM_W_EN(id_mem_w_en),
+		.WB_EN(id_wb_en)
+	);
+
+	ID_Stage_reg(
+		.clk(clk),
+		.rst(rst),
+		.flush(id_if_flush),
+		.Dest_in(id_dest),
+		.Reg2_in(id_reg2),
+		.Val2_in(id_val2),
+		.Val1_in(id_val1),
+		.PC_in(if_pc_out),
+		.Br_taken_in(id_br_taken),
+		.EXE_CMD_in(id_exe_cmd),
+		.MEM_R_EN_in(id_mem_r_en),
+		.MEM_W_EN_IN(id_mem_w_en),
+		.WB_EN_in(id_wb_en),
+		.Dest(id_dest_out),
+		.Reg2(id_reg2_out),
+		.Val2(id_val2_out),
+		.Val1(id_val1_out),
+		.PC_out(id_pc_out),
+		.Br_taken(id_br_taken_out),
+		.EXE_CMD(id_exe_cmd_out),
+		.MEM_R_EN(id_mem_r_en_out),
+		.MEM_W_EN(id_mem_w_en_out),
+		.WB_EN(id_wb_en_out)
+	);
+
 	EXE_Stage(clk, rst, PC4, PC5);
 	EXE_Stage_reg(clk, rst, PC5, PC6);
 	MEM_Stage(clk, rst, PC6, PC7);
 	MEM_Stage_reg(clk, rst, PC7, PC8);
 	WB_Stage(clk, rst, PC8, PC9);
-	WB_Stage_reg(clk, rst, PC9, PC10);
+	
 	
 	// DEBUG SEVEN SEGMENTS
 	seven_segment seven1(PC1[3:0], HEX0);
