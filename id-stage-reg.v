@@ -15,13 +15,13 @@ module ID_Stage_reg(
 	output reg [4:0] Dest,
 	output reg [31:0] Reg2,
 	output reg [31:0] Val2,
-	output reg [31:0] Val2,
+	output reg [31:0] Val1,
 	output reg [31:0] PC_out,
 	output reg Br_taken,
 	output reg [3:0] EXE_CMD,
 	output reg MEM_R_EN,
 	output reg MEM_W_EN,
-	output reg WB_EN,
+	output reg WB_EN
 	);
 	
 endmodule

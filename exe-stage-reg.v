@@ -10,12 +10,12 @@ module EXE_Stage_reg(
 	output reg MEM_R_EN,
 	output reg [31:0] ALU_result,
 	output reg [31:0] Mem_read_value,
-	output reg [4:0] Dest,
+	output reg [4:0] Dest
 	);
-	always @(posedge clk, posedge rst) begin
+/*	always @(posedge clk, posedge rst) begin
 		if(rst)
 			PC <= 32'b0;
 		else
 			PC <= PC_in;
-	end
+	end */
 endmodule

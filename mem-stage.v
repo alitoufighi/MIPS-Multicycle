@@ -4,7 +4,7 @@ module MEM_Stage(
 	input MEM_W_EN_in,
 	input [31:0] ALU_result_in,
 	input [31:0] ST_val,
-	output [31:0] Mem_read_value,
+	output [31:0] Mem_read_value
 	);
-	assign PC = PC_in;
+	// assign PC = PC_in;
 endmodule

@@ -14,7 +14,7 @@ module EXE_Stage(
 	output reg [31:0] PC,
 	output reg [31:0] ALU_result,
 	output reg [31:0] ST_val,
-	output reg [4:0] Dest,
+	output reg [4:0] Dest
 	);
-	assign PC = PC_in;
+	// assign PC = PC_in;
 endmodule

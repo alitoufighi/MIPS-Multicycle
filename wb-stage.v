@@ -9,5 +9,5 @@ module WB_Stage(
 	output [31:0] Write_value,
 	output [4:0] Dest
 	);
-	assign PC = PC_in;
+	// assign PC = PC_in;
 endmodule
