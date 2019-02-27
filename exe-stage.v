@@ -1,20 +1,13 @@
 module EXE_Stage(
 	input clk,
-	input rst,
-	input WB_en_in,
-	input MEM_R_EN_in,
-	input MEM_W_EN_in,
-	input [31:0] PC_in,
-	input [31:0] ALU_result_in,
-	input [31:0] ST_val_in,
-	input [31:0] Dest_in,
-	output reg WB_en,
-	output reg MEM_R_EN,
-	output reg MEM_W_EN,
-	output reg [31:0] PC,
-	output reg [31:0] ALU_result,
-	output reg [31:0] ST_val,
-	output reg [4:0] Dest
+	input [3:0] EXE_CMD,
+	input [31:0] val1,
+	input [31:0] val2,
+	input [31:0] val_src2,
+	input [1:0] Br_type,
+	output [31:0] ALU_result,
+	output [31:0] Br_Addr,
+	output Br_taken
 	);
 	// assign PC = PC_in;
 endmodule
