@@ -9,11 +9,14 @@ module IF_Stage (
     Instruction_mem instruction_memory(PC, Instruction);
 
 	always @(posedge clk, posedge rst) begin
-      if (rst)
-        PC <= 32'b0;
-      else begin
-        PC <= PC + 4;
-      end
-    end
+		if(rst)
+			PC <= 32'b0;
+		else begin
+			if(Br_taken)
+				PC <= Br_Addr;
+			else
+				PC <= PC + 4;
+		end
+	end
 
 endmodule
