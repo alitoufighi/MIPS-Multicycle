@@ -4,3 +4,4 @@ db/
 *.bak
 incremental_db/
 output_files/
+*.stp

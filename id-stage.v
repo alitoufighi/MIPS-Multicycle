@@ -18,8 +18,15 @@ module ID_Stage(
 );
 	
 	wire is_imm;
-	Control_unit cu(.opcode(Instruction[31:26]),
-			.exec_command(EXE_CMD), .mem_read(MEM_R_EN), .mem_write(MEM_W_EN), .wb_enable(WB_EN), .is_immediate(is_imm), .branch_type(Br_type));
+	Control_unit cu(
+			.opcode(Instruction[31:26]),
+			.exec_command(EXE_CMD),
+			.mem_read(MEM_R_EN),
+			.mem_write(MEM_W_EN),
+			.wb_enable(WB_EN),
+			.is_immediate(is_imm),
+			.branch_type(Br_type)
+	);
 
 	wire [31:0] RegF1, RegF2;
 	wire [31:0] sign_extended;
