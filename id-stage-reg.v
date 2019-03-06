@@ -26,8 +26,8 @@ module ID_Stage_reg(
 	output reg WB_EN
 );
 
-	always @(posedge clk, posedge rst) begin
-		if(rst) begin
+	always @(posedge clk, posedge rst, posedge flush) begin
+		if(rst || flush) begin
 			Dest <= 0;
 			Reg2 <= 0;
 			Val2 <= 0;

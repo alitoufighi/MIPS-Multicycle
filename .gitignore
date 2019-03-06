@@ -2,6 +2,10 @@
 *.qsf
 db/
 *.bak
+*.qws
+*.mti
+*.mpf
+test/work/
 incremental_db/
 output_files/
 *.stp

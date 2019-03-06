@@ -9,8 +9,9 @@ module IF_Stage_reg(
 	output reg[31:0] PC,
 	output reg[31:0] Instruction
 	);
+
 	always @(posedge clk, posedge rst) begin
-		if(rst) begin
+		if(rst || flush) begin
 			PC <= 0;
 			Instruction <= 0;
 		end
@@ -19,4 +20,5 @@ module IF_Stage_reg(
 			Instruction <= Instruction_in;
 		end
 	end
+	
 endmodule
