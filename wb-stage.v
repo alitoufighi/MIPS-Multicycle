@@ -9,5 +9,6 @@ module WB_Stage(
 	output [31:0] Write_value,
 	output [4:0] Dest
 	);
+	assign Write_value = (MEM_R_EN) ? Mem_read_value : ALU_result; 
 	// assign PC = PC_in;
 endmodule
