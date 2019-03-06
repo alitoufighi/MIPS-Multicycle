@@ -9,7 +9,7 @@ module MEM_Stage_reg(
 	input [4:0] Dest_in,
 	input [31:0] PC_in,
 
-	output reg WB_en;
+	output reg WB_en,
 	output reg MEM_R_EN,
 	output reg [31:0] ALU_result,
 	output reg [31:0] MEM_read_value,

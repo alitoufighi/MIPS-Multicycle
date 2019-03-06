@@ -2,7 +2,7 @@ module EXE_Stage_reg(
 	input clk,
 	input rst,
 
-	input WB_en_in,
+	input WB_EN_in,
 	input MEM_R_EN_in,
 	input MEM_W_EN_in,
 	input [31:0] PC_in,
@@ -10,7 +10,7 @@ module EXE_Stage_reg(
 	input [31:0] ST_val_in,
 	input [31:0] Dest_in,
 
-	output reg WB_en,
+	output reg WB_EN,
 	output reg MEM_R_EN,
 	output reg MEM_W_EN,
 	output reg [31:0] PC,

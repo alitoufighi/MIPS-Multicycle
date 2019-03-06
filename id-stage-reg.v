@@ -11,7 +11,7 @@ module ID_Stage_reg(
 	input [1:0] Br_type_in,
 	input [3:0] EXE_CMD_in,
 	input MEM_R_EN_in,
-	input MEM_W_EN_IN,
+	input MEM_W_EN_in,
 	input WB_EN_in,
 
 	output reg [4:0] Dest,
@@ -44,7 +44,7 @@ module ID_Stage_reg(
 			Reg2 <= Reg2_in;
 			Val2 <= Val2_in;
 			Val1 <= Val1_in;
-			PC_out <= PC_out_in;
+			PC_out <= PC_in;
 			Br_type <= Br_type_in;
 			EXE_CMD <= EXE_CMD_in;
 			MEM_R_EN <= MEM_R_EN_in;
