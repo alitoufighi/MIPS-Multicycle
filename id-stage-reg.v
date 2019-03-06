@@ -27,7 +27,7 @@ module ID_Stage_reg(
 	);
 
 	always @(posedge clk, rst) begin
-		if(rst) begin
+		if(rst || flush) begin
 			Dest <= 0;
 			Reg2 <= 0;
 			Val2 <= 0;
