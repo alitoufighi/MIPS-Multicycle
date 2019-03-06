@@ -333,55 +333,59 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	// wire [31:0] id_wb_data, id_wb_data_out;
 	// wire id_if_flush, id_if_flush_out;
 	// wire [4:0] id_dest, id_dest_out;
-	// wire [31:0] id_reg2, id_reg2_out, id_val2, id_val2_out, id_val1, id_val1_out;
-	// wire [1:0] id_br_type, id_br_type_out;
-	// wire [3:0] id_exe_cmd, id_exe_cmd_out;
-	// wire id_mem_r_en, id_mem_r_en_out, id_mem_w_en, id_mem_w_en_out, id_wb_en, id_wb_en_out;
+	wire [31:0] id_reg2, id_reg2_out, id_val2, id_val2_out, id_val1, id_val1_out;
+	wire [1:0] id_br_type, id_br_type_out;
+	wire [3:0] id_exe_cmd, id_exe_cmd_out;
+	wire id_mem_r_en, id_mem_r_en_out, id_mem_w_en, id_mem_w_en_out, id_wb_en, id_wb_en_out;
 
-	// ID_Stage(
-	// 	.clk(clk),
-	// 	.rst(rst),
-	// 	.Instruction(instruction2),
-	// 	.WB_Write_Enable(id_wb_write_en),
-	// 	.WB_Dest(id_wb_dest),
-	// 	.WB_Data(id_wb_data),
-	// 	.IF_flush(id_if_flush),
-	// 	.Dest(id_dest),
-	// 	.Reg2(id_reg2),
-	// 	.Val2(id_val2),
-	// 	.Val1(id_val1),
-	// 	.Br_type(id_br_type),
-	// 	.EXE_CMD(id_exe_cmd),
-	// 	.MEM_R_EN(id_mem_r_en),
-	// 	.MEM_W_EN(id_mem_w_en),
-	// 	.WB_EN(id_wb_en)
-	// );
+	ID_Stage(
+			.clk(clk),
+			.rst(rst),
 
-	// ID_Stage_reg(
-	// 	.clk(clk),
-	// 	.rst(rst),
-	// 	.flush(id_if_flush),
-	// 	.Dest_in(id_dest),
-	// 	.Reg2_in(id_reg2),
-	// 	.Val2_in(id_val2),
-	// 	.Val1_in(id_val1),
-	// 	.PC_in(if_pc_out),
-	// 	.Br_type_in(id_br_type),
-	// 	.EXE_CMD_in(id_exe_cmd),
-	// 	.MEM_R_EN_in(id_mem_r_en),
-	// 	.MEM_W_EN_IN(id_mem_w_en),
-	// 	.WB_EN_in(id_wb_en),
-	// 	.Dest(id_dest_out),
-	// 	.Reg2(id_reg2_out),
-	// 	.Val2(id_val2_out),
-	// 	.Val1(id_val1_out),
-	// 	.PC_out(id_pc_out),
-	// 	.Br_type(id_br_type_out),
-	// 	.EXE_CMD(id_exe_cmd_out),
-	// 	.MEM_R_EN(id_mem_r_en_out),
-	// 	.MEM_W_EN(id_mem_w_en_out),
-	// 	.WB_EN(id_wb_en_out)
-	// );
+			.Instruction(if_instruction_out),
+			.WB_Write_Enable(id_wb_write_en/*TODO*/),
+			.WB_Dest(id_wb_dest/*TODO*/),
+			.WB_Data(id_wb_data/*TODO*/),
+
+			// .IF_flush(flush),
+			.Dest(id_dest),
+			.Reg2(id_reg2),
+			.Val2(id_val2),
+			.Val1(id_val1),
+			.Br_type(id_br_type),
+			.EXE_CMD(id_exe_cmd),
+			.MEM_R_EN(id_mem_r_en),
+			.MEM_W_EN(id_mem_w_en),
+			.WB_EN(id_wb_en)
+	);
+
+	ID_Stage_reg(
+			.clk(clk),
+			.rst(rst),
+			.flush(flush),
+			
+			.Dest_in(id_dest),
+			.Reg2_in(id_reg2),
+			.Val2_in(id_val2),
+			.Val1_in(id_val1),
+			.PC_in(if_pc_out),
+			.Br_type_in(id_br_type),
+			.EXE_CMD_in(id_exe_cmd),
+			.MEM_R_EN_in(id_mem_r_en),
+			.MEM_W_EN_IN(id_mem_w_en),
+			.WB_EN_in(id_wb_en),
+			
+			.Dest(id_dest_out),
+			.Reg2(id_reg2_out),
+			.Val2(id_val2_out),
+			.Val1(id_val1_out),
+			.PC_out(id_pc_out),
+			.Br_type(id_br_type_out),
+			.EXE_CMD(id_exe_cmd_out),
+			.MEM_R_EN(id_mem_r_en_out),
+			.MEM_W_EN(id_mem_w_en_out),
+			.WB_EN(id_wb_en_out)
+	);
 
 	/*
 	wire [31:0] exe_alu_result;

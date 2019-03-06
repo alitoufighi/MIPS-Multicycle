@@ -24,9 +24,9 @@ module ID_Stage_reg(
 	output reg MEM_R_EN,
 	output reg MEM_W_EN,
 	output reg WB_EN
-	);
+);
 
-	always @(posedge clk, rst) begin
+	always @(posedge clk, posedge rst) begin
 		if(rst) begin
 			Dest <= 0;
 			Reg2 <= 0;

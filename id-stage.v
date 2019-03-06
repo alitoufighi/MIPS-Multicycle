@@ -1,11 +1,13 @@
 module ID_Stage(
 	input clk,
 	input rst,
+
 	input [31:0] Instruction,
 	input WB_Write_Enable,
 	input [4:0] WB_Dest,
 	input [31:0] WB_Data,
-	output IF_flush,
+
+	// output IF_flush,
 	output [4:0] Dest,
 	output [31:0] Reg2,
 	output [31:0] Val2,
@@ -20,11 +22,12 @@ module ID_Stage(
 	wire is_imm;
 	Control_unit cu(
 			.opcode(Instruction[31:26]),
-			.exec_command(EXE_CMD),
-			.mem_read(MEM_R_EN),
-			.mem_write(MEM_W_EN),
-			.wb_enable(WB_EN),
-			.is_immediate(is_imm),
+
+			.exec_cmd(EXE_CMD),
+			.mem_r_en(MEM_R_EN),
+			.mem_w_en(MEM_W_EN),
+			.wb_en(WB_EN),
+			.is_imm(is_imm),
 			.branch_type(Br_type)
 	);
 
