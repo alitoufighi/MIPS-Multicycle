@@ -10,7 +10,8 @@ module EXE_Stage(
 
 		output [31:0] ALU_result,
 		output [31:0] Br_Addr,
-		output Br_taken
+		output Br_taken,
+		output flush
 );
 
 	Adder adder(.val1(PC), .val2(val2), .result(Br_Addr));
@@ -19,4 +20,6 @@ module EXE_Stage(
 					.branch_type(Br_type), .branch_taken(Br_taken));
 
 	ALU alu(.in1(val1), .in2(val2), .cmd(EXE_CMD), .result(ALU_result));
+
+	assign flush = Br_taken;
 endmodule

@@ -19,7 +19,7 @@ module EXE_Stage_reg(
 	output reg [4:0] Dest
 	);
 
-	always @(posedge clk, rst) begin
+	always @(posedge clk, posedge rst) begin
 		if(rst) begin
 			WB_EN <= 0;
 			MEM_R_EN <= 0;

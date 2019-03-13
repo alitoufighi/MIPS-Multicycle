@@ -309,6 +309,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire[31:0] if_pc, if_pc_out, id_pc_out;
 	wire[31:0] if_instruction, if_instruction_out;
 	
+	wire flush;
+	
 	IF_Stage if_stage(
 			.clk(clk),
 			.rst(rst),
@@ -401,7 +403,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 			.ALU_result(exe_alu_result),
 			.Br_Addr(exe_br_addr),
-			.Br_taken(exe_br_taken)
+			.Br_taken(exe_br_taken),
+			.flush(flush)
 	);
 
 	wire exe_wb_en_out;
@@ -410,14 +413,14 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire[31:0] exe_alu_result_out;
 	wire[31:0] exe_mem_read_value_out;
 	wire[4:0] exe_dest_out;
-	input[31:0] ST_val_out,
+	wire[31:0] ST_val_out;
 	wire[31:0] exe_pc_out;
 
 	EXE_Stage_reg exe_stage_register(
 			.clk(clk),
 			.rst(rst),
 
-			.WB_en_in(id_wb_en_out),
+			.WB_EN_in(id_wb_en_out),
 			.MEM_R_EN_in(id_mem_r_en_out),
 			.MEM_W_EN_in(id_mem_w_en_out),
 			.PC_in(id_pc_out),
@@ -425,7 +428,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.ST_val_in(id_reg2_out),
 			.Dest_in(id_dest_out),
 
-			.WB_en(exe_wb_en_out),
+			.WB_EN(exe_wb_en_out),
 			.MEM_R_EN(exe_mem_r_en_out),
 			.MEM_W_EN(exe_mem_w_en_out),
 			.PC(exe_pc_out),
@@ -471,7 +474,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	WB_Stage wb_stage(
 			.clk(clk),
 
-			.WB_en_in(mem_wb_en_out),
+			.WB_EN_in(mem_wb_en_out),
 			.MEM_R_EN(mem_mem_r_en_out),
 			.ALU_result(mem_alu_result_out),
 			.Mem_read_value(mem_Mem_read_value_out),

@@ -1,6 +1,6 @@
 module Instruction_mem(input[31:0] addr, output[31:0] out);
 
-    wire[31:0] instruction_mem[0: 11];
+    wire[31:0] instruction_mem[0: 1023];
 
     wire[31:0] shifted_address;
     assign shifted_address     = {2'b0, addr[31:2]};
@@ -74,7 +74,7 @@ module Instruction_mem(input[31:0] addr, output[31:0] out);
     assign instruction_mem[66] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[67] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[68] = 32'b001010_01010_01011_01010_00000000000;//-- sll r10 ,r1 ,r11 //2
-    assign instruction_mem[99] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
+    assign instruction_mem[69] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[70] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[71] = 32'b000101_01001_01010_01001_00000000000;//-- And r9 ,r9 ,r10 // if(r5>r6) r9=0 else r9=-2147483648
     assign instruction_mem[72] = 32'b000000_00000_00000_00000_00000000000;//-- NOP

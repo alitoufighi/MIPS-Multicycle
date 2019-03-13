@@ -17,7 +17,7 @@ module MEM_Stage_reg(
 	output reg[31:0] PC
 );
 
-	always @(posedge clk, rst) begin
+	always @(posedge clk, posedge rst) begin
 		if(rst) begin
 			WB_en <= 0;
 			MEM_R_EN <= 0;
