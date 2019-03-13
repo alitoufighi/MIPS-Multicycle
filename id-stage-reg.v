@@ -1,7 +1,7 @@
 module ID_Stage_reg(
 	input clk,
 	input rst,
-	input flush,
+	// input flush,
 
 	input [4:0] Dest_in,
 	input [31:0] Reg2_in,
@@ -26,8 +26,8 @@ module ID_Stage_reg(
 	output reg WB_EN
 );
 
-	always @(posedge clk, posedge rst, posedge flush) begin
-		if(rst || flush) begin
+	always @(posedge clk, posedge rst) begin
+		if(rst) begin
 			Dest <= 0;
 			Reg2 <= 0;
 			Val2 <= 0;

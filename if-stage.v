@@ -6,7 +6,11 @@ module IF_Stage (
 	output reg [31:0] PC,
 	output [31:0] Instruction
 	);
-    Instruction_mem instruction_memory(PC, Instruction);
+   
+	Instruction_mem instruction_memory(
+			.addr(PC),
+			.out(Instruction)
+	);
 
 	always @(posedge clk, posedge rst) begin
 		if(rst)
