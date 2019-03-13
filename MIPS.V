@@ -308,8 +308,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 	wire[31:0] if_pc, if_pc_out, id_pc_out, PC4, PC5, PC6, PC7, PC8, PC9, PC10;
 	wire[31:0] if_instruction, if_instruction_out;
-
-	IF_Stage(
+	
+	IF_Stage if_stage(
 			.clk(clk),
 			.rst(rst),
 			.Br_taken(Br_taken),
@@ -318,27 +318,24 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.Instruction(if_instruction)
 	);
 
-	IF_Stage_reg(
+	IF_Stage_reg if_stage_reg(
 			.clk(clk),
 			.rst(rst),
-			.flush(flush),
+			// .flush(flush),
+
 			.PC_in(if_pc),
 			.Instruction_in(if_instruction),
+			
 			.PC(if_pc_out),
 			.Instruction(if_instruction_out)
 	);
 
-	// wire id_wb_write_en, id_wb_write_en_out;
-	// wire [4:0] id_wb_dest, id_wb_dest_out;
-	// wire [31:0] id_wb_data, id_wb_data_out;
-	// wire id_if_flush, id_if_flush_out;
-	// wire [4:0] id_dest, id_dest_out;
 	wire [31:0] id_reg2, id_reg2_out, id_val2, id_val2_out, id_val1, id_val1_out;
 	wire [1:0] id_br_type, id_br_type_out;
 	wire [3:0] id_exe_cmd, id_exe_cmd_out;
 	wire id_mem_r_en, id_mem_r_en_out, id_mem_w_en, id_mem_w_en_out, id_wb_en, id_wb_en_out;
 
-	ID_Stage(
+	ID_Stage id_stage(
 			.clk(clk),
 			.rst(rst),
 
@@ -347,7 +344,6 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.WB_Dest(id_wb_dest/*TODO*/),
 			.WB_Data(id_wb_data/*TODO*/),
 
-			// .IF_flush(flush),
 			.Dest(id_dest),
 			.Reg2(id_reg2),
 			.Val2(id_val2),
@@ -359,10 +355,10 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.WB_EN(id_wb_en)
 	);
 
-	ID_Stage_reg(
+	ID_Stage_reg id_stage_reg(
 			.clk(clk),
 			.rst(rst),
-			.flush(flush),
+			// .flush(flush),
 			
 			.Dest_in(id_dest),
 			.Reg2_in(id_reg2),
@@ -372,9 +368,9 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.Br_type_in(id_br_type),
 			.EXE_CMD_in(id_exe_cmd),
 			.MEM_R_EN_in(id_mem_r_en),
-			.MEM_W_EN_IN(id_mem_w_en),
+			.MEM_W_EN_in(id_mem_w_en),
 			.WB_EN_in(id_wb_en),
-			
+
 			.Dest(id_dest_out),
 			.Reg2(id_reg2_out),
 			.Val2(id_val2_out),
@@ -387,97 +383,99 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.WB_EN(id_wb_en_out)
 	);
 
-	/*
-	wire [31:0] exe_alu_result;
-	wire [31:0] exe_br_addr;
-	wire exe_br_taken;
+	// wire [31:0] exe_alu_result;
+	// wire [31:0] exe_br_addr;
+	// wire exe_br_taken;
 
-	EXE_Stage(
-		.clk(clk),
-		.EXE_CMD(id_exe_cmd_out),
-		.val1(id_val1_out),
-		.val2(id_val2_out),
-		.val_src2(id_reg2_out),
-		.Br_type(id_br_type_out),
-		.ALU_result(exe_alu_result),
-		.Br_Addr(exe_br_addr),
-		.Br_taken(exe_br_taken)
-	);
+	// EXE_Stage exe_stage(
+	// 	.clk(clk),
 
-	wire exe_wb_en_out;
-	wire exe_mem_r_en_out;
-	wire exe_mem_w_en_out;
-	wire[31:0] exe_alu_result_out;
-	wire[31:0] exe_mem_read_value_out;
-	wire[4:0] exe_dest_out;
+	// 	.EXE_CMD(id_exe_cmd_out),
+	// 	.val1(id_val1_out),
+	// 	.val2(id_val2_out),
+	// 	.val_src2(id_reg2_out),
+	// 	.Br_type(id_br_type_out),
+	// 	.PC(id_pc_out),
+
+	// 	.ALU_result(exe_alu_result),
+	// 	.Br_Addr(exe_br_addr),
+	// 	.Br_taken(exe_br_taken)
+	// );
+
+	// wire exe_wb_en_out;
+	// wire exe_mem_r_en_out;
+	// wire exe_mem_w_en_out;
+	// wire[31:0] exe_alu_result_out;
+	// wire[31:0] exe_mem_read_value_out;
+	// wire[4:0] exe_dest_out;
 	
-	module EXE_Stage_reg(
-		.clk(clk),
-		.rst(rst),
-		.WB_en_in(),
-		.MEM_R_EN_in(),
-		.MEM_W_EN_in(),
-		.PC_in(),
-		.ALU_result_in(),
-		.ST_val_in(),
-		.Dest_in(),
-		.WB_en(exe_wb_en_out),
-		.MEM_R_EN(exe_mem_r_en_out),
-		.MEM_W_EN(exe_mem_w_en_out),
-		.PC(PC8)
-		.ALU_result(exe_alu_result_out),
-		//.ST_val(),
-		.Dest(exe_dest_out)
-	);
+	// module EXE_Stage_reg(
+	// 	.clk(clk),
+	// 	.rst(rst),
+	// 	.WB_en_in(),
+	// 	.MEM_R_EN_in(),
+	// 	.MEM_W_EN_in(),
+	// 	.PC_in(),
+	// 	.ALU_result_in(),
+	// 	.ST_val_in(),
+	// 	.Dest_in(),
+	// 	.WB_en(exe_wb_en_out),
+	// 	.MEM_R_EN(exe_mem_r_en_out),
+	// 	.MEM_W_EN(exe_mem_w_en_out),
+	// 	.PC(PC8)
+	// 	.ALU_result(exe_alu_result_out),
+	// 	//.ST_val(),
+	// 	.Dest(exe_dest_out)
+	// );
 	
-		input clk,
-	input rst,
-	input WB_en_in,
-	input MEM_R_EN_in,
-	input MEM_W_EN_in,
+	// input clk,
+	// input rst,
+	// input WB_en_in,
+	// input MEM_R_EN_in,
+	// input MEM_W_EN_in,
 	
-	input [31:0] PC_in,
-	input [31:0] ALU_result_in,
-	input [31:0] ST_val_in,
-	input [31:0] Dest_in,
+	// input [31:0] PC_in,
+	// input [31:0] ALU_result_in,
+	// input [31:0] ST_val_in,
+	// input [31:0] Dest_in,
 	
-	output reg WB_en,
+	// output reg WB_en,
 	
-	output reg MEM_R_EN,
-	output reg MEM_W_EN,
-	output reg [31:0] PC,
-	output reg [31:0] ALU_result,
-	output reg [31:0] ST_val,
-	output reg [4:0] Dest
-	wire[31:0] mem_Mem_read_value;
-	MEM_Stage mem_stage(
-		.clk(clk),
-		.MEM_R_EN_in(exe_mem_r_en_out),
-		.MEM_W_EN_in(exe_mem_w_en_out),
-		.ALU_result_in(exe_alu_result_out),
-		.ST_val(),
-		.Mem_read_value(mem_Mem_read_value)
-	);
+	// output reg MEM_R_EN,
+	// output reg MEM_W_EN,
+	// output reg [31:0] PC,
+	// output reg [31:0] ALU_result,
+	// output reg [31:0] ST_val,
+	// output reg [4:0] Dest
+	// wire[31:0] mem_Mem_read_value;
+	// MEM_Stage mem_stage(
+	// 	.clk(clk),
+	// 	.MEM_R_EN_in(exe_mem_r_en_out),
+	// 	.MEM_W_EN_in(exe_mem_w_en_out),
+	// 	.ALU_result_in(exe_alu_result_out),
+	// 	.ST_val(),
+	// 	.Mem_read_value(mem_Mem_read_value)
+	// );
 	
-	MEM_Stage_reg(
-		.clk(clk),
-		.rst(rst),
-		.PC_in(PC7),
-		.PC_out(PC8)
-	);
+	// MEM_Stage_reg(
+	// 	.clk(clk),
+	// 	.rst(rst),
+	// 	.PC_in(PC7),
+	// 	.PC_out(PC8)
+	// );
 	
-	WB_Stage(
-		.clk(clk),
-		.WB_en_in(id_wb_en),
-		.MEM_R_EN(id_),
-	input [31:0] ALU_result,
-	input [31:0] Mem_read_value,
-	input [4:0] Dest_in,
-	output WB_en,
-	output [31:0] Write_value,
-	output [4:0] Dest
-	);
-	*/
+	// WB_Stage(
+	// 	.clk(clk),
+	// 	.WB_en_in(id_wb_en),
+	// 	.MEM_R_EN(id_),
+	// input [31:0] ALU_result,
+	// input [31:0] Mem_read_value,
+	// input [4:0] Dest_in,
+	// output WB_en,
+	// output [31:0] Write_value,
+	// output [4:0] Dest
+	// );
+
 	// DEBUG SEVEN SEGMENTS
 	// seven_segment seven1(if_PC_in[3:0], HEX0);
 	// seven_segment seven2(if_pc_out[3:0], HEX1);

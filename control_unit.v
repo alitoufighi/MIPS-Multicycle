@@ -77,7 +77,7 @@ module Control_unit(
 				wb_en <= 1;
 			end
 			
-			6'b000001: begin // SUBI
+			6'b100001: begin // SUBI
 				exec_cmd <= 4'b0010;
 				is_imm <= 1;
 				wb_en <= 1;
@@ -112,6 +112,11 @@ module Control_unit(
 				exec_cmd <= 4'b0000;
 				is_imm <= 1;
 				branch_type <= 2'b11;
+			end
+			default: begin
+				exec_cmd <= 4'b0000;
+				is_imm <= 0;
+				branch_type <= 2'b00;
 			end
 		endcase
     end
