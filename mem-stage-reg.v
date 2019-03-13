@@ -15,7 +15,7 @@ module MEM_Stage_reg(
 	output reg [31:0] MEM_read_value,
 	output reg [4:0] Dest,
 	output reg[31:0] PC
-	);
+);
 
 	always @(posedge clk, rst) begin
 		if(rst) begin
