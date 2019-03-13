@@ -1,7 +1,7 @@
 module WB_Stage(
 	input clk,
 
-	input WB_en_in,
+	input WB_EN_in,
 	input MEM_R_EN,
 	input [31:0] ALU_result,
 	input [31:0] Mem_read_value,
@@ -12,4 +12,6 @@ module WB_Stage(
 	output [4:0] Dest
 	);
 	assign Write_value = (MEM_R_EN) ? Mem_read_value : ALU_result; 
+	assign Dest = Dest_in;
+	assign WB_en = WB_EN_in;
 endmodule
