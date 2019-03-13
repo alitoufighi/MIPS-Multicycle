@@ -17,8 +17,7 @@ module EXE_Stage_reg(
 	output reg [31:0] ALU_result,
 	output reg [31:0] ST_val,
 	output reg [4:0] Dest
-	);
-
+);
 	always @(posedge clk, posedge rst) begin
 		if(rst) begin
 			WB_EN <= 0;

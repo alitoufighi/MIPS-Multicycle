@@ -1,4 +1,8 @@
-module seven_segment(input[3:0] in, output reg [6:0] out);
+module seven_segment(
+	input[3:0] in,
+	
+	output reg [6:0] out
+);
 	always @(*) begin
 		case(in)
 			4'd0: out <= 7'b1000000;

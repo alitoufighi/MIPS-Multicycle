@@ -9,5 +9,4 @@ module Condition_Check(
                           (branch_type==2'b10) ? val1 != val2 :
                           (branch_type==2'b11) ? 1'b1 :
                           1'b0;
-
 endmodule

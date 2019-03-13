@@ -11,24 +11,20 @@ module Registers_file(
 		output [31:0] out1,
 		output [31:0] out2
 );
-
 	reg [31:0] registers[31:0];
 	assign out1                     = registers[src1];
 	assign out2                     = registers[src2];
 	
 	always @(negedge clk, posedge rst) begin : Memory
-		if (rst == 1) begin : reset_condition
+		if (rst) begin : reset_condition
 			integer i;
 			for(i = 0; i < 32; i = i + 1) begin
 				registers[i] <= i;
 			end
 		end
 
-		else begin
-			if (Write_EN == 1) begin
-				registers[dest] <= Write_Val;
-			end
-		end
+		else if (Write_EN & (dest != 0))
+			registers[dest] <= Write_Val;
 	end
 	
 endmodule

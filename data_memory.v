@@ -11,11 +11,8 @@ module Data_Memory(
 
     assign read_val = (MEM_R_EN) ? memory[addr] : 32'b0;
 
-    always @(posedge clk) begin
-        
-        if(MEM_W_EN) begin
+    always @(posedge clk) begin        
+        if(MEM_W_EN)
             memory[addr] <= write_val;
-        end
     end
 endmodule
-
