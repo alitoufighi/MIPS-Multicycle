@@ -11,7 +11,7 @@ module Registers_file(
 		output [31:0] out1,
 		output [31:0] out2
 );
-	reg [31:0] registers[31:0];
+	reg [31:0] registers[0:31];
 	assign out1                     = registers[src1];
 	assign out2                     = registers[src2];
 	
