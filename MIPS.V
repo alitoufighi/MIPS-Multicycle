@@ -302,6 +302,7 @@ input          TD_CLK27;            //	TV Decoder 27MHz CLK
 inout	[35:0]	GPIO_0;					//	GPIO Connection 0
 inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
+/* ******************************************************************************************************************** */
 	wire clk, rst;
 	assign clk = CLOCK_50;
 	assign rst = SW[3];
@@ -310,12 +311,14 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire[31:0] if_instruction, if_instruction_out;
 	
 	wire flush;
-	
+
 	IF_Stage if_stage(
 			.clk(clk),
 			.rst(rst),
-			.Br_taken(Br_taken),
-			.Br_Addr(Br_Addr),
+			
+			.Br_taken(exe_br_taken),
+			.Br_Addr(exe_br_addr),
+
 			.PC(if_pc),
 			.Instruction(if_instruction)
 	);
@@ -339,14 +342,18 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire [31:0] id_wb_data;
 	wire [4:0] id_wb_dest;
 
+	wire [31:0] wb_wb_data;
+	wire [4:0] wb_wb_dest;
+	wire wb_wb_en;
+
 	ID_Stage id_stage(
 			.clk(clk),
 			.rst(rst),
 
 			.Instruction(if_instruction_out),
-			.WB_Write_Enable(id_wb_write_en),
-			.WB_Dest(id_wb_dest),
-			.WB_Data(id_wb_data),
+			.WB_Write_Enable(wb_wb_en),
+			.WB_Dest(wb_wb_dest),
+			.WB_Data(wb_wb_data),
 
 			.Dest(id_dest),
 			.Reg2(id_reg2),
@@ -480,9 +487,9 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.Mem_read_value(mem_Mem_read_value_out),
 			.Dest_in(mem_dest_out),
 			
-			.WB_en(id_wb_en),
-			.Write_value(id_wb_data),
-			.Dest(id_wb_dest)
+			.WB_en(wb_wb_en),
+			.Write_value(wb_wb_data),
+			.Dest(wb_wb_dest)
 	);
 
 	// DEBUG SEVEN SEGMENTS

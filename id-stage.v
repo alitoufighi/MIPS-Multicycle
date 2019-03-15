@@ -34,8 +34,8 @@ module ID_Stage(
     Registers_file reg_file(
             .clk(clk),
             .rst(rst),
-            .src1(Instruction[20:16]),
-            .src2(Instruction[15:11]),
+            .src1(Instruction[25:21]),
+            .src2(Instruction[20:16]),
             .dest(WB_Dest),
             .Write_Val(WB_Data),
             .Write_EN(WB_Write_Enable),
