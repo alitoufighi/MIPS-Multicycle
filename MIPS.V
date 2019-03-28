@@ -174,7 +174,6 @@ module MIPS
 		GPIO_0,							//	GPIO Connection 0
 		GPIO_1							//	GPIO Connection 1
 	);
-
 ////////////////////////	Clock Input	 	////////////////////////
 input		   	CLOCK_27;				//	27 MHz
 input		   	CLOCK_50;				//	50 MHz
@@ -306,7 +305,10 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire clk, rst;
 	assign clk = CLOCK_50;
 	assign rst = SW[3];
-
+	
+	wire [31:0] exe_br_addr;
+	wire exe_br_taken;
+	
 	wire[31:0] if_pc, if_pc_out, id_pc_out;
 	wire[31:0] if_instruction, if_instruction_out;
 	
@@ -338,6 +340,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire [31:0] id_reg2, id_reg2_out, id_val2, id_val2_out, id_val1, id_val1_out;
 	wire [1:0] id_br_type, id_br_type_out;
 	wire [3:0] id_exe_cmd, id_exe_cmd_out;
+	wire [4:0] id_dest;
 	wire id_mem_r_en, id_mem_r_en_out, id_mem_w_en, id_mem_w_en_out, id_wb_en, id_wb_en_out;
 	wire [31:0] id_wb_data;
 	wire [4:0] id_wb_dest;
@@ -366,6 +369,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.WB_EN(id_wb_en)
 	);
 
+	wire[4:0] id_dest_out;
+	
 	ID_Stage_reg id_stage_reg(
 			.clk(clk),
 			.rst(rst),
@@ -395,8 +400,6 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	);
 
 	wire [31:0] exe_alu_result;
-	wire [31:0] exe_br_addr;
-	wire exe_br_taken;
 
 	EXE_Stage exe_stage(
 			.clk(clk),
@@ -422,7 +425,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire[4:0] exe_dest_out;
 	wire[31:0] ST_val_out;
 	wire[31:0] exe_pc_out;
-
+	
 	EXE_Stage_reg exe_stage_register(
 			.clk(clk),
 			.rst(rst),
@@ -444,6 +447,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.Dest(exe_dest_out)
 	);
 
+
+	wire[31:0] mem_Mem_read_value;
 	MEM_Stage mem_stage(
 			.clk(clk),
 
@@ -501,3 +506,4 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	// seven_segment seven6(instruction1[24:21], HEX5);
 	// seven_segment seven7(instruction2[24:21], HEX6);
 endmodule
+

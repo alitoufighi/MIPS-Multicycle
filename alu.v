@@ -12,7 +12,7 @@ module ALU(
                     (cmd==4'b0110) ? ~(in1 | in2) :
                     (cmd==4'b0111) ? in1 ^ in2 :
                     (cmd==4'b1000) ? in1 << in2 :
-                    (cmd==4'b1001) ? $signed(in1) >>> in2 :
+                    (cmd==4'b1001) ? $signed($signed(in1) >>> in2) :
                     (cmd==4'b1010) ? in1 >> in2 :
                     32'b0;
 endmodule
