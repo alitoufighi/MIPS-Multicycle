@@ -25,8 +25,8 @@ module ID_Stage_reg(
     output reg MEM_W_EN,
     output reg WB_EN
 );
-    always @(posedge clk, posedge rst, posedge flush) begin
-        if(rst | flush) begin
+    always @(posedge clk, posedge rst) begin
+        if(rst) begin
             Dest <= 0;
             Reg2 <= 0;
             Val2 <= 0;
@@ -38,6 +38,18 @@ module ID_Stage_reg(
             MEM_W_EN <= 0;
             WB_EN <= 0;
         end
+		  else if (flush) begin
+				Dest <= 0;
+            Reg2 <= 0;
+            Val2 <= 0;
+            Val1 <= 0;
+            PC_out <= 0;
+            Br_type <= 0;
+            EXE_CMD <= 0;
+            MEM_R_EN <= 0;
+            MEM_W_EN <= 0;
+            WB_EN <= 0;
+		  end
         else begin
             Dest <= Dest_in;
             Reg2 <= Reg2_in;
