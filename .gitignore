@@ -9,3 +9,5 @@ test/work/
 incremental_db/
 output_files/
 *.stp
+test/wlf*
+test/*.wlf
