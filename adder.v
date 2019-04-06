@@ -4,5 +4,5 @@ module Adder(
 
     output [31:0] result
 );
-    assign result = val1 + val2;
+    assign result = val1 + (val2 << 2);
 endmodule
