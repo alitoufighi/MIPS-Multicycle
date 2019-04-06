@@ -55,22 +55,22 @@ module Instruction_mem(
     assign instruction_mem[45] = 32'b100000_00000_00001_00000_00000000011;//-- Addi r1 ,r0 ,3 //r1=3
     assign instruction_mem[46] = 32'b100000_00000_00100_00000_10000000000;//-- Addi r4 ,r0 ,1024 //r4=1024
     assign instruction_mem[47] = 32'b100000_00000_00010_00000_00000000000;//-- Addi r2 ,r0 ,0 //r2=0
-    assign instruction_mem[48] = 32'b100000_00000_00011_00000_00000000001;//-- Addi r3 ,r0 ,1 //r3=1
+    assign instruction_mem[48] = 32'b100000_00000_00011_00000_00000000001;//-- Addi r3 ,r0 ,1 //r3=1        // BR2 Dest
     assign instruction_mem[49] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
-    assign instruction_mem[50] = 32'b100000_00000_01001_00000_00000000010;//-- Addi r9 ,r0 ,2 //r9=2
+    assign instruction_mem[50] = 32'b100000_00000_01001_00000_00000000010;//-- Addi r9 ,r0 ,2 //r9=2        // BR1 Dest
     assign instruction_mem[51] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[52] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
-    assign instruction_mem[53] = 32'b001010_00011_01001_01000_00000000000;//-- sll r8 ,r3 ,r9 //r8=r3*4
+    assign instruction_mem[53] = 32'b001010_00011_01001_01000_00000000000;//-- sll r8 ,r3 ,r9 //r8=r3 << 2
     assign instruction_mem[54] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[55] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
-    assign instruction_mem[56] = 32'b000001_00100_01000_01000_00000000000;//-- Add r8 ,r4 ,r8 //r8=1024+r3*4
+    assign instruction_mem[56] = 32'b000001_00100_01000_01000_00000000000;//-- Add r8 ,r4 ,r8 //r8=1024 + r8
     assign instruction_mem[57] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[58] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
-    assign instruction_mem[59] = 32'b100100_01000_00101_00000_00000000000;//-- ld r5 ,r8 ,0 //r5=-1546
-    assign instruction_mem[60] = 32'b100100_01000_00110_11111_11111111100;//-- ld r6 ,r8 ,-4 //r6=1546
+    assign instruction_mem[59] = 32'b100100_01000_00101_00000_00000000000;//-- ld r5 ,r8 ,0 //r5=M[r8]
+    assign instruction_mem[60] = 32'b100100_01000_00110_11111_11111111100;//-- ld r6 ,r8 ,-4 //r6=M[r8-4]
     assign instruction_mem[61] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[62] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
-    assign instruction_mem[63] = 32'b000011_00101_00110_01001_00000000000;//-- sub r9 ,r5 ,r6 //r9=-3092
+    assign instruction_mem[63] = 32'b000011_00101_00110_01001_00000000000;//-- sub r9 ,r5 ,r6 //r9=r5-r6
     assign instruction_mem[64] = 32'b100000_00000_01010_10000_00000000000;//-- Addi r10 ,r0 ,-0x8000 //r10=-32768
     assign instruction_mem[65] = 32'b100000_00000_01011_00000_00000010000;//-- Addi r11 ,r0 ,16 //r11=16
     assign instruction_mem[66] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
@@ -81,17 +81,17 @@ module Instruction_mem(
     assign instruction_mem[71] = 32'b000101_01001_01010_01001_00000000000;//-- And r9 ,r9 ,r10 // if(r5>r6) r9=0 else r9=-2147483648
     assign instruction_mem[72] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[73] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
-    assign instruction_mem[74] = 32'b101000_01001_00000_00000_00000000010;//-- Bez r9 ,2                // OK (2 bod, unchanged)
+    assign instruction_mem[74] = 32'b101000_01001_00000_00000_00000000010;//-- Bez r9 ,2
     assign instruction_mem[75] = 32'b100101_01000_00101_11111_11111111100;//-- st r5 ,r8 ,-4
     assign instruction_mem[76] = 32'b100101_01000_00110_00000_00000000000;//-- st r6 ,r8 ,0
     assign instruction_mem[77] = 32'b100000_00011_00011_00000_00000000001;//-- Addi r3 ,r3 ,1 //r3++
     assign instruction_mem[78] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[79] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
-    assign instruction_mem[80] = 32'b101001_00001_00011_11111_11111100001;//-- BNE r1 ,r3 ,-31          // OK (-15 bod, 16 ta ezafe shod)
+    assign instruction_mem[80] = 32'b101001_00001_00011_11111_11111100001;//-- BNE r1 ,r3 ,-31          // BR1
     assign instruction_mem[81] = 32'b100000_00010_00010_00000_00000000001;//-- Addi r2 ,r2 ,1 //r2++
     assign instruction_mem[82] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[83] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
-    assign instruction_mem[84] = 32'b101001_00001_00010_11111_11111011011;//-- BNE r1 ,r2 ,-37          // OK (-18 bod, 3ta + 16ta ezafe shod)
+    assign instruction_mem[84] = 32'b101001_00001_00010_11111_11111011011;//-- BNE r1 ,r2 ,-37          // BR2
     assign instruction_mem[85] = 32'b100000_00000_00001_00000_10000000000;//-- Addi r1 ,r0 ,1024 //r1=1024
     assign instruction_mem[86] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[87] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
@@ -104,8 +104,8 @@ module Instruction_mem(
     assign instruction_mem[94] = 32'b100100_00001_00110_00000_00000010000;//-- ld ,r6 ,r1 ,16 //r6=1545
     assign instruction_mem[95] = 32'b100100_00001_00111_00000_00000010100;//-- ld ,r7 ,r1 ,20 //r7=-6184
     assign instruction_mem[96] = 32'b100100_00001_01000_00000_00000011000;//-- ld ,r8 ,r1 ,24 //r8=-1546
-    assign instruction_mem[97] = 32'b100100_00001_01001_00000_00000011100;//-- ld ,r9 ,r1 ,28 //r9=1073741437
-    assign instruction_mem[98] = 32'b100100_00001_01010_00000_00000100000;//-- ld ,r10,r1 ,32 //r10=-387
+    assign instruction_mem[97] = 32'b100100_00001_01001_00000_00000011100;//-- ld ,r9 ,r1 ,28 //r9=1073741437       // !!! r9=-387
+    assign instruction_mem[98] = 32'b100100_00001_01010_00000_00000100000;//-- ld ,r10,r1 ,32 //r10=-387            // !!! r10=1073741437
     assign instruction_mem[99] = 32'b100100_00001_01011_00000_00000100100;//-- ld ,r11,r1 ,36 //r11=-6184
     assign instruction_mem[100] = 32'b101010_00000_00000_11111_11111111111;//-- JMP -1*/
 
