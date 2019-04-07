@@ -13,25 +13,40 @@ module EXE_Stage(
         output Br_taken,
         output flush
 );
-    Adder adder(
-            .val1(PC),
-            .val2(val2),
-            .result(Br_Addr)
-    );
+//     Adder adder(
+//             .val1(PC),
+//             .val2(val2),
+//             .result(Br_Addr)
+//     );
 
-    Condition_Check condition_check(
-            .val1(val1),
-            .val2(val_src2),
-            .branch_type(Br_type),
-            .branch_taken(Br_taken)
-    );
+//     Condition_Check condition_check(
+//             .val1(val1),
+//             .val2(val_src2),
+//             .branch_type(Br_type),
+//             .branch_taken(Br_taken)
+//     );
+    assign Br_taken = (Br_type==2'b01) ? val1 == 32'b0 :
+                      (Br_type==2'b10) ? val1 != val2 :
+                      (Br_type==2'b11) ? 1'b1 :
+                      1'b0;
 
-    ALU alu(
-            .in1(val1),
-            .in2(val2),
-            .cmd(EXE_CMD),
-            .result(ALU_result)
-    );
+    // ALU alu(
+    //         .in1(val1),
+    //         .in2(val2),
+    //         .cmd(EXE_CMD),
+    //         .result(ALU_result)
+    // );
+    assign ALU_result = (EXE_CMD==4'b0000) ? val1 + val2 :
+                        (EXE_CMD==4'b0010) ? val1 - val2 :
+                        (EXE_CMD==4'b0100) ? val1 & val2 :
+                        (EXE_CMD==4'b0101) ? val1 | val2 :
+                        (EXE_CMD==4'b0110) ? ~(val1 | val2) :
+                        (EXE_CMD==4'b0111) ? val1 ^ val2 :
+                        (EXE_CMD==4'b1000) ? val1 << val2 :
+                        (EXE_CMD==4'b1001) ? $signed($signed(val1) >>> val2) :
+                        (EXE_CMD==4'b1010) ? val1 >> val2 :
+                        32'b0;
 
+    assign Br_Addr = PC + val2;
     assign flush = Br_taken;
 endmodule
