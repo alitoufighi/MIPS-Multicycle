@@ -38,8 +38,8 @@ module ID_Stage_reg(
             MEM_W_EN <= 0;
             WB_EN <= 0;
         end
-		  else if (flush) begin
-				Dest <= 0;
+		else if (flush) begin
+            Dest <= 0;
             Reg2 <= 0;
             Val2 <= 0;
             Val1 <= 0;
@@ -49,7 +49,7 @@ module ID_Stage_reg(
             MEM_R_EN <= 0;
             MEM_W_EN <= 0;
             WB_EN <= 0;
-		  end
+        end
         else begin
             Dest <= Dest_in;
             Reg2 <= Reg2_in;
