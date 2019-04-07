@@ -5,18 +5,14 @@ module IF_Stage (
     input Br_taken,
     input [31:0] Br_Addr,
 
-    output [31:0] PC_inc,
+    output reg [31:0] PC,
     output [31:0] Instruction
 );
-    reg [31:0] PC;
-    
-    assign PC_inc = PC + 4;
-
     Instruction_mem instruction_memory(
             .addr(PC),
             .out(Instruction)
     );
-    
+
     always @(posedge clk, posedge rst) begin
         if(rst)
             PC <= 32'b0;
@@ -24,7 +20,7 @@ module IF_Stage (
             if(Br_taken)
                 PC <= Br_Addr;
             else
-                PC <= PC_inc;
+                PC <= PC + 4;
         end
     end
 endmodule

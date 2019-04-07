@@ -321,7 +321,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.Br_taken(exe_br_taken),
 			.Br_Addr(exe_br_addr),
 
-			.PC_inc(if_pc),
+			.PC(if_pc),
 			.Instruction(if_instruction)
 	);
 
