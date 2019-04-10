@@ -6,7 +6,8 @@ module Control_unit(
         output reg mem_w_en,
         output reg wb_en,
         output reg is_imm,
-        output reg[1:0] branch_type
+        output reg[1:0] branch_type,
+        output reg signle_src
 );
     always @(*) begin
         exec_cmd <= 4'b0;

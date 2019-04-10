@@ -6,6 +6,7 @@ module ID_Stage(
     input WB_Write_Enable,
     input [4:0] WB_Dest,
     input [31:0] WB_Data,
+    input hazard_detected,
 
     output [4:0] Dest,
     output [31:0] Reg2,
@@ -15,7 +16,8 @@ module ID_Stage(
     output [3:0] EXE_CMD,
     output MEM_R_EN,
     output MEM_W_EN,
-    output WB_EN
+    output WB_EN,
+    output single_src
 );
     wire is_imm;
     wire [31:0] RegF1, RegF2;
@@ -23,13 +25,18 @@ module ID_Stage(
 
     Control_unit cu(
             .opcode(Instruction[31:26]),
+
             .exec_cmd(EXE_CMD),
             .mem_r_en(MEM_R_EN),
             .mem_w_en(MEM_W_EN),
             .wb_en(WB_EN),
             .is_imm(is_imm),
-            .branch_type(Br_type)
+            .branch_type(Br_type),
+            .is_single_src(single_src)
     );
+
+    {EXE_CMD, MEM_R_EN, MEM_W_EN, WB_EN, is_imm, Br_type, single_src} = (hazard_detected) ? 9'b0 : 
+                                                                        {EXE_CMD, MEM_R_EN, MEM_W_EN, WB_EN, is_imm, Br_type, single_src};
 
     Registers_file reg_file(
             .clk(clk),

@@ -313,10 +313,12 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire[31:0] if_instruction, if_instruction_out;
 	
 	wire flush;
+	wire hazard_detected;
 
 	IF_Stage if_stage(
 			.clk(clk),
 			.rst(rst),
+			.freeze(hazard_detected),
 			
 			.Br_taken(exe_br_taken),
 			.Br_Addr(exe_br_addr),
@@ -328,6 +330,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	IF_Stage_reg if_stage_reg(
 			.clk(clk),
 			.rst(rst),
+			.freeze(hazard_detected),
 			.flush(flush),
 
 			.PC_in(if_pc),
@@ -348,6 +351,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire [31:0] wb_wb_data;
 	wire [4:0] wb_wb_dest;
 	wire wb_wb_en;
+	wire single_src;
 
 	ID_Stage id_stage(
 			.clk(clk),
@@ -357,6 +361,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.WB_Write_Enable(wb_wb_en),
 			.WB_Dest(wb_wb_dest),
 			.WB_Data(wb_wb_data),
+			.hazard_detected(hazard_detected),
 
 			.Dest(id_dest),
 			.Reg2(id_reg2),
@@ -366,8 +371,21 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.EXE_CMD(id_exe_cmd),
 			.MEM_R_EN(id_mem_r_en),
 			.MEM_W_EN(id_mem_w_en),
-			.WB_EN(id_wb_en)
+			.WB_EN(id_wb_en),
+			.single_src(single_src)
 	);
+
+    Hazard_Detection_Unit hdu(
+        .single_src(single_src),
+        .src1(if_instruction_out[25:21]),
+		.src2(if_instruction_out[20:16]),
+        .EXE_Dest(id_dest_out),
+        .EXE_WB_EN(id_wb_en_out),
+        .Mem_Dest(exe_dest_out),
+        .MEM_WB_EN(exe_wb_en_out),
+
+        .hazard_detected(hazard_detected)
+    );
 
 	wire[4:0] id_dest_out;
 	

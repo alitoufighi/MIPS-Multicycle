@@ -1,6 +1,7 @@
 module IF_Stage (
     input clk,
     input rst,
+    input freeze,
     
     input Br_taken,
     input [31:0] Br_Addr,
@@ -23,7 +24,7 @@ module IF_Stage (
         else begin
             if(Br_taken)
                 PC <= Br_Addr;
-            else
+            else if(~freeze)
                 PC <= PC_inc;
         end
     end
