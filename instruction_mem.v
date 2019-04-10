@@ -6,7 +6,7 @@ module Instruction_mem(
 
     wire[31:0] shifted_address;
     assign shifted_address     = {2'b0, addr[31:2]};
-
+/////// to fuck git
     assign instruction_mem[0 ] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
     assign instruction_mem[1 ] = 32'b100000_00000_00001_00000_11000001010;//-- Addi r1 ,r0 ,1546 //r1=1546
     assign instruction_mem[2 ] = 32'b000000_00000_00000_00000_00000000000;//-- NOP
