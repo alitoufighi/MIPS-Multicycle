@@ -10,6 +10,8 @@ module EXE_Stage(
         input [1:0] val1_forward_sel,
         input [1:0] val2_forward_sel,
         input [1:0] val3_forward_sel,
+        input [31:0] mem_forward,
+        input [31:0] wb_forward,
 
         output [31:0] ALU_result,
         output [31:0] Br_Addr,
