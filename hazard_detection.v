@@ -2,23 +2,25 @@ module Hazard_Detection_Unit(
     input single_src,
     input [4:0] src1,
     input [4:0] src2,
-    input [4:0] Exe_Dest,
-    input Exe_WB_EN,
-    input [4:0] Mem_Dest,
-    input Mem_WB_En,
+    input [4:0] EXE_Dest,
+    input EXE_WB_EN,
+    input [4:0] MEM_Dest,
+    input MEM_WB_EN,
     
-    output hazard_detected
+    output reg hazard_detected
 );
     always @(*) begin
-        if(Mem_WB_En) begin
-            hazard_detected = (Mem_Dest == src1);
+        hazard_detected = 0;
+        if(MEM_WB_EN) begin
+            hazard_detected = (MEM_Dest == src1);
             if(~single_src)
-                hazard_detected = (hazard_detected | (Mem_Dest == src2));
+                hazard_detected = (hazard_detected | (MEM_Dest == src2));
         end
-        if(Exe_WB_EN) begin
-            hazard_detected = (Exe_Dest == src1);
+        if(EXE_WB_EN) begin
+            hazard_detected = (EXE_Dest == src1);
             if(~single_src)
-                hazard_detected = (hazard_detected | (Exe_Dest == src2));
+                hazard_detected = (hazard_detected | (EXE_Dest == src2));
         end
     end
+
 endmodule

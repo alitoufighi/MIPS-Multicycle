@@ -23,20 +23,24 @@ module ID_Stage(
     wire [31:0] RegF1, RegF2;
     wire [31:0] sign_extended;
 
+    wire [3:0] _EXE_CMD;
+    wire _MEM_R_EN, _MEM_W_EN, _WB_EN, _is_imm, _single_src;
+    wire [1:0] _Br_type;
+
     Control_unit cu(
             .opcode(Instruction[31:26]),
 
-            .exec_cmd(EXE_CMD),
-            .mem_r_en(MEM_R_EN),
-            .mem_w_en(MEM_W_EN),
-            .wb_en(WB_EN),
-            .is_imm(is_imm),
-            .branch_type(Br_type),
-            .is_single_src(single_src)
+            .exec_cmd(_EXE_CMD),
+            .mem_r_en(_MEM_R_EN),
+            .mem_w_en(_MEM_W_EN),
+            .wb_en(_WB_EN),
+            .is_imm(_is_imm),
+            .branch_type(_Br_type),
+            .single_src(_single_src)
     );
 
-    {EXE_CMD, MEM_R_EN, MEM_W_EN, WB_EN, is_imm, Br_type, single_src} = (hazard_detected) ? 9'b0 : 
-                                                                        {EXE_CMD, MEM_R_EN, MEM_W_EN, WB_EN, is_imm, Br_type, single_src};
+    assign {EXE_CMD, MEM_R_EN, MEM_W_EN, WB_EN, is_imm, Br_type, single_src} = (hazard_detected) ? 11'b0 : 
+                                                                        {_EXE_CMD, _MEM_R_EN, _MEM_W_EN, _WB_EN, _is_imm, _Br_type, _single_src};
 
     Registers_file reg_file(
             .clk(clk),

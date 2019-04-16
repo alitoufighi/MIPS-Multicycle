@@ -375,19 +375,21 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.single_src(single_src)
 	);
 
+	wire exe_wb_en_out;
+	wire[4:0] id_dest_out;
+	wire[4:0] exe_dest_out;
+
     Hazard_Detection_Unit hdu(
         .single_src(single_src),
         .src1(if_instruction_out[25:21]),
 		.src2(if_instruction_out[20:16]),
         .EXE_Dest(id_dest_out),
         .EXE_WB_EN(id_wb_en_out),
-        .Mem_Dest(exe_dest_out),
+        .MEM_Dest(exe_dest_out),
         .MEM_WB_EN(exe_wb_en_out),
 
         .hazard_detected(hazard_detected)
     );
-
-	wire[4:0] id_dest_out;
 	
 	ID_Stage_reg id_stage_reg(
 			.clk(clk),
@@ -435,12 +437,10 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.flush(flush)
 	);
 
-	wire exe_wb_en_out;
 	wire exe_mem_r_en_out;
 	wire exe_mem_w_en_out;
 	wire[31:0] exe_alu_result_out;
 	wire[31:0] exe_mem_read_value_out;
-	wire[4:0] exe_dest_out;
 	wire[31:0] ST_val_out;
 	wire[31:0] exe_pc_out;
 	
