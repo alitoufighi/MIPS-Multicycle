@@ -10,17 +10,17 @@ module Hazard_Detection_Unit(
     output reg hazard_detected
 );
     always @(*) begin
-        hazard_detected = 0;
+        hazard_detected         = 0;
         if(MEM_WB_EN) begin
-            hazard_detected = (MEM_Dest == src1);
+            hazard_detected     = (MEM_Dest == src1);
             if(~single_src)
                 hazard_detected = (hazard_detected | (MEM_Dest == src2));
         end
         if(EXE_WB_EN) begin
-            hazard_detected = (EXE_Dest == src1);
+            hazard_detected     = (EXE_Dest == src1);
             if(~single_src)
                 hazard_detected = (hazard_detected | (EXE_Dest == src2));
         end
     end
-
+    
 endmodule

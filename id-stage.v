@@ -9,6 +9,8 @@ module ID_Stage(
     input hazard_detected,
 
     output [4:0] Dest,
+    output [4:0] Src1,
+    output [4:0] Src2,
     output [31:0] Reg2,
     output [31:0] Val2,
     output [31:0] Val1,
@@ -22,6 +24,9 @@ module ID_Stage(
     wire is_imm;
     wire [31:0] RegF1, RegF2;
     wire [31:0] sign_extended;
+    
+    assign Src1 = Instruction[25:21];
+    assign Src2 = Instruction[20:16];
 
     wire [3:0] _EXE_CMD;
     wire _MEM_R_EN, _MEM_W_EN, _WB_EN, _is_imm, _single_src;
@@ -45,8 +50,8 @@ module ID_Stage(
     Registers_file reg_file(
             .clk(clk),
             .rst(rst),
-            .src1(Instruction[25:21]),
-            .src2(Instruction[20:16]),
+            .src1(Src1),
+            .src2(Src2),
             .dest(WB_Dest),
             .Write_Val(WB_Data),
             .Write_EN(WB_Write_Enable),

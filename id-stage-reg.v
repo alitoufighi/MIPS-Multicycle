@@ -4,6 +4,8 @@ module ID_Stage_reg(
     input flush,
 
     input [4:0] Dest_in,
+    input [4:0] Src1_in,
+    input [4:0] Src2_in,
     input [31:0] Reg2_in,
     input [31:0] Val2_in,
     input [31:0] Val1_in,
@@ -15,6 +17,8 @@ module ID_Stage_reg(
     input WB_EN_in,
 
     output reg [4:0] Dest,
+    output reg [4:0] Src1,
+    output reg [4:0] Src2,
     output reg [31:0] Reg2,
     output reg [31:0] Val2,
     output reg [31:0] Val1,
@@ -28,6 +32,8 @@ module ID_Stage_reg(
     always @(posedge clk, posedge rst) begin
         if(rst) begin
             Dest <= 0;
+            Src1 <= 0;
+            Src2 <= 0;
             Reg2 <= 0;
             Val2 <= 0;
             Val1 <= 0;
@@ -40,6 +46,8 @@ module ID_Stage_reg(
         end
         else if (flush) begin
             Dest <= 0;
+            Src1 <= 0;
+            Src2 <= 0;
             Reg2 <= 0;
             Val2 <= 0;
             Val1 <= 0;
@@ -52,6 +60,8 @@ module ID_Stage_reg(
         end
         else begin
             Dest <= Dest_in;
+            Src1 <= Src1_in;
+            Src2 <= Src2_in;
             Reg2 <= Reg2_in;
             Val2 <= Val2_in;
             Val1 <= Val1_in;
