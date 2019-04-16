@@ -303,8 +303,11 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 /* ******************************************************************************************************************** */
 	wire clk, rst;
+	wire forwarding_enable;
+
 	assign clk = CLOCK_50;
 	assign rst = SW[3];
+	assign forwarding_enable = 1'b1;
 	
 	wire [31:0] exe_br_addr;
 	wire exe_br_taken;
@@ -314,6 +317,38 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	
 	wire flush;
 	wire hazard_detected;
+
+	wire[31:0] mem_Mem_read_value;
+
+	wire [31:0] exe_alu_result, st_value;
+	wire [1:0] val1_forward_sel, val2_forward_sel, val3_forward_sel;
+
+	wire [31:0] id_reg2, id_reg2_out, id_val2, id_val2_out, id_val1, id_val1_out;
+	wire [1:0] id_br_type, id_br_type_out;
+	wire [3:0] id_exe_cmd, id_exe_cmd_out;
+	wire [4:0] id_dest, id_src1, id_src2;
+	wire [4:0] id_dest_out, id_src1_out, id_src2_out;
+	wire id_mem_r_en, id_mem_r_en_out, id_mem_w_en, id_mem_w_en_out, id_wb_en, id_wb_en_out;
+	wire [31:0] id_wb_data;
+	wire [4:0] id_wb_dest;
+
+	wire [31:0] wb_wb_data;
+	wire [4:0] wb_wb_dest;
+	wire wb_wb_en;
+	wire single_src;
+
+	wire exe_wb_en_out;
+	wire exe_mem_r_en_out;
+	wire exe_mem_w_en_out;
+	wire[31:0] exe_alu_result_out;
+	wire[31:0] exe_mem_read_value_out;
+	wire[4:0] exe_dest_out;
+	wire[31:0] ST_val_out;
+	wire[31:0] exe_pc_out;
+
+	wire[31:0] mem_alu_result_out, mem_pc_out, mem_Mem_read_value_out;
+	wire mem_mem_r_en_out;
+	wire[4:0] mem_dest_out;
 
 	IF_Stage if_stage(
 			.clk(clk),
@@ -339,23 +374,6 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.PC(if_pc_out),
 			.Instruction(if_instruction_out)
 	);
-
-	wire [31:0] id_reg2, id_reg2_out, id_val2, id_val2_out, id_val1, id_val1_out;
-	wire [1:0] id_br_type, id_br_type_out;
-	wire [3:0] id_exe_cmd, id_exe_cmd_out;
-	wire [4:0] id_dest, id_src1, id_src2;
-	wire [4:0] id_dest_out, id_src1_out, id_src2_out;
-	wire id_mem_r_en, id_mem_r_en_out, id_mem_w_en, id_mem_w_en_out, id_wb_en, id_wb_en_out;
-	wire [31:0] id_wb_data;
-	wire [4:0] id_wb_dest;
-
-	wire [31:0] wb_wb_data;
-	wire [4:0] wb_wb_dest;
-	wire wb_wb_en;
-	wire single_src;
-	
-	wire exe_wb_en_out;
-	wire[4:0] exe_dest_out;
 
 	ID_Stage id_stage(
 			.clk(clk),
@@ -425,12 +443,6 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.WB_EN(id_wb_en_out)
 	);
 
-	wire [31:0] exe_alu_result, st_value;
-	wire [1:0] val1_forward_sel, val2_forward_sel, val3_forward_sel;
-
-	// wire forwarding_enable = SW[0];
-	wire forwarding_enable;
-	assign forwarding_enable = 1'b1;
 	Forwarding_Unit forwarding_unit(
 			.src1(id_src1_out),
 			.src2(id_src2_out),
@@ -460,6 +472,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.val1_forward_sel(val1_forward_sel),
 			.val2_forward_sel(val2_forward_sel),
 			.val3_forward_sel(val3_forward_sel),
+			.mem_forward(exe_alu_result_out),
+			.wb_forward(wb_wb_data),
 
 			.ALU_result(exe_alu_result),
 			.Br_Addr(exe_br_addr),
@@ -468,13 +482,6 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.ST_value(st_value)
 	);
 
-	wire exe_mem_r_en_out;
-	wire exe_mem_w_en_out;
-	wire[31:0] exe_alu_result_out;
-	wire[31:0] exe_mem_read_value_out;
-	wire[31:0] ST_val_out;
-	wire[31:0] exe_pc_out;
-	
 	EXE_Stage_reg exe_stage_register(
 			.clk(clk),
 			.rst(rst),
@@ -496,8 +503,6 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.Dest(exe_dest_out)
 	);
 
-
-	wire[31:0] mem_Mem_read_value;
 	MEM_Stage mem_stage(
 			.clk(clk),
 
@@ -508,10 +513,6 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 			.Mem_read_value(mem_Mem_read_value)
 	);
-	
-	wire[31:0] mem_alu_result_out, mem_pc_out, mem_Mem_read_value_out;
-	wire mem_mem_r_en_out;
-	wire[4:0] mem_dest_out;
 
 	MEM_Stage_reg mem_stage_register(
 			.clk(clk),
