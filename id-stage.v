@@ -24,9 +24,9 @@ module ID_Stage(
     wire is_imm;
     wire [31:0] RegF1, RegF2;
     wire [31:0] sign_extended;
-    
+
     assign Src1 = Instruction[25:21];
-    assign Src2 = Instruction[20:16];
+    assign Src2 = is_imm ? 32'b0 : Instruction[20:16];
 
     Control_unit cu(
             .opcode(Instruction[31:26]),

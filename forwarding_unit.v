@@ -16,19 +16,19 @@ module Forwarding_Unit(
     output [1:0] val3_forward_sel
 );
 
-    assign val1_forward_sel = (forwarding_enable == 1'b0) ? 2'b0 :
-                              (MEM_Dest == src1 & MEM_WB_EN) ? 2'b01 :
-                              (WB_Dest == src1 & WB_WB_EN) ? 2'b10 :
+    assign val1_forward_sel = (~forwarding_enable)             ? 2'b0 :
+                              ((MEM_Dest == src1) & MEM_WB_EN) ? 2'b01 :
+                              ((WB_Dest == src1) & WB_WB_EN)   ? 2'b10 :
                               2'b0;
     
-    assign val2_forward_sel = (forwarding_enable == 1'b0) ? 2'b0 :
-                              (MEM_Dest == src2 & MEM_WB_EN) ? 2'b01 :
-                              (WB_Dest == src2 & WB_WB_EN) ? 2'b10 :
+    assign val2_forward_sel = (~forwarding_enable)             ? 2'b0 :
+                              ((MEM_Dest == src2) & MEM_WB_EN) ? 2'b01 :
+                              ((WB_Dest == src2) & WB_WB_EN)   ? 2'b10 :
                               2'b0;
     
-    assign val3_forward_sel = (forwarding_enable == 1'b0) ? 2'b0 :
-                              (MEM_Dest == src3 & MEM_WB_EN) ? 2'b01 :
-                              (WB_Dest == src3 & WB_WB_EN) ? 2'b10 :
+    assign val3_forward_sel = (~forwarding_enable)             ? 2'b0 :
+                              ((MEM_Dest == src3) & MEM_WB_EN) ? 2'b01 :
+                              ((WB_Dest == src3) & WB_WB_EN)   ? 2'b10 :
                               2'b0;
 
 endmodule
