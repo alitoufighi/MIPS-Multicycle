@@ -2,6 +2,7 @@ module Hazard_Detection_Unit(
     input single_src,
     input [4:0] src1,
     input [4:0] src2,
+<<<<<<< HEAD
 
     input [4:0] Exe_Dest,
     input Exe_WB_EN,
@@ -33,4 +34,5 @@ module Hazard_Detection_Unit(
             end
         end
     end
+    
 endmodule

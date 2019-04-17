@@ -18,7 +18,7 @@ module ID_Stage_reg(
 
     output reg [4:0] Dest,
     output reg [4:0] Src1,
-    output reg [4:0] Src2;
+    output reg [4:0] Src2,
     output reg [31:0] Reg2,
     output reg [31:0] Val2,
     output reg [31:0] Val1,

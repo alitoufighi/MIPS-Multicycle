@@ -405,7 +405,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 		.src2(if_instruction_out[20:16]),
         .EXE_Dest(id_dest_out),
         .EXE_WB_EN(id_wb_en_out),
-        .Mem_Dest(exe_dest_out),
+        .MEM_Dest(exe_dest_out),
         .MEM_WB_EN(exe_wb_en_out),
 
         .hazard_detected(hazard_detected)

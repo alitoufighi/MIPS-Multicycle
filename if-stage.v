@@ -24,8 +24,11 @@ module IF_Stage (
         else begin
             if(Br_taken)
                 PC <= Br_Addr;
-            else if(~freeze)
+            else if(freeze)
+                PC <= PC;
+            else begin
                 PC <= PC_inc;
+            end
         end
     end
 endmodule
