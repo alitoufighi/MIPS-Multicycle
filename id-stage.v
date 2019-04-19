@@ -19,14 +19,12 @@ module ID_Stage(
     output MEM_R_EN,
     output MEM_W_EN,
     output WB_EN,
-    output single_src
+    output single_src,
+    output if_store_bne
 );
     wire is_imm;
     wire [31:0] RegF1, RegF2;
     wire [31:0] sign_extended;
-
-    assign Src1 = Instruction[25:21];
-    assign Src2 = is_imm ? 32'b0 : Instruction[20:16];
 
     wire [3:0] _EXE_CMD;
     wire _MEM_R_EN, _MEM_W_EN, _WB_EN, _is_imm, _single_src;
@@ -41,17 +39,18 @@ module ID_Stage(
             .wb_en(_WB_EN),
             .is_imm(_is_imm),
             .branch_type(_Br_type),
-            .single_src(_single_src)
+            .single_src(_single_src),
+            .if_store_bne(_if_store_bne)
     );
 
-    assign {EXE_CMD, MEM_R_EN, MEM_W_EN, WB_EN, is_imm, Br_type, single_src} = (hazard_detected) ? 11'b0 : 
-                                                                        {_EXE_CMD, _MEM_R_EN, _MEM_W_EN, _WB_EN, _is_imm, _Br_type, _single_src};
+    assign {EXE_CMD, MEM_R_EN, MEM_W_EN, WB_EN, is_imm, Br_type, single_src, if_store_bne} = (hazard_detected) ? 12'b0 : 
+                                                                        {_EXE_CMD, _MEM_R_EN, _MEM_W_EN, _WB_EN, _is_imm, _Br_type, _single_src, _if_store_bne};
 
     Registers_file reg_file(
             .clk(clk),
             .rst(rst),
             .src1(Src1),
-            .src2(Src2),
+            .src2(Instruction[20:16]),
             .dest(WB_Dest),
             .Write_Val(WB_Data),
             .Write_EN(WB_Write_Enable),
@@ -67,5 +66,9 @@ module ID_Stage(
     assign Val2 = is_imm ? sign_extended : RegF2;
     assign Val1 = RegF1;
     assign Reg2 = RegF2;
+
+    assign Src1 = Instruction[25:21];
+    assign Src2 = is_imm ? 5'b0 : Instruction[20:16];
+
     assign Dest = is_imm ? Instruction[20:16] : Instruction[15:11];
 endmodule

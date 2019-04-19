@@ -336,6 +336,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire [4:0] wb_wb_dest;
 	wire wb_wb_en;
 	wire single_src;
+	wire if_store_bne;
 
 	wire exe_wb_en_out;
 	wire exe_mem_r_en_out;
@@ -349,6 +350,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire[31:0] mem_alu_result_out, mem_pc_out, mem_Mem_read_value_out;
 	wire mem_mem_r_en_out;
 	wire[4:0] mem_dest_out;
+	wire mem_wb_en_out;
 
 	IF_Stage if_stage(
 			.clk(clk),
@@ -396,7 +398,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.MEM_R_EN(id_mem_r_en),
 			.MEM_W_EN(id_mem_w_en),
 			.WB_EN(id_wb_en),
-			.single_src(single_src)
+			.single_src(single_src),
+			.if_store_bne(if_store_bne)
 	);
 
     Hazard_Detection_Unit hdu(
@@ -407,6 +410,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
         .EXE_WB_EN(id_wb_en_out),
         .MEM_Dest(exe_dest_out),
         .MEM_WB_EN(exe_wb_en_out),
+        .forwarding_enable(forwarding_enable),
+        .MEM_R_EN(exe_mem_r_en_out),
 
         .hazard_detected(hazard_detected)
     );
@@ -454,6 +459,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.WB_Dest(mem_dest_out),
 			.WB_WB_EN(mem_wb_en_out),
 			.forwarding_enable(forwarding_enable),
+			.if_store_bne(if_store_bne),
 
 			.val1_forward_sel(val1_forward_sel),
 			.val2_forward_sel(val2_forward_sel),
@@ -546,14 +552,5 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.Write_value(wb_wb_data),
 			.Dest(wb_wb_dest)
 	);
-
-	// DEBUG SEVEN SEGMENTS
-	// seven_segment seven1(if_PC_in[3:0], HEX0);
-	// seven_segment seven2(if_pc_out[3:0], HEX1);
-	// seven_segment seven3(id_pc_out[3:0], HEX2);
-	// seven_segment seven4(PC7[3:0], HEX3);
-	// seven_segment seven5(PC9[3:0], HEX4);
-	// seven_segment seven6(instruction1[24:21], HEX5);
-	// seven_segment seven7(instruction2[24:21], HEX6);
 endmodule
 

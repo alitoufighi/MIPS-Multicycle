@@ -19,11 +19,7 @@ module EXE_Stage(
         output flush,
         output [31:0] ST_value
 );
-//     Adder adder(
-        //     .val1(PC),
-        //     .val2(val2),
-        //     .result(Br_Addr)
-//     );
+
     wire [31:0] forwarded_val1, forwarded_val2;
 
     assign flush = Br_taken;
