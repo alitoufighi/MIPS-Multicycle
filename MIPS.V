@@ -335,7 +335,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire [31:0] wb_wb_data;
 	wire [4:0] wb_wb_dest;
 	wire wb_wb_en;
-	wire single_src;
+	wire is_imm;
 	wire if_store_bne;
 
 	wire exe_wb_en_out;
@@ -398,23 +398,43 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.MEM_R_EN(id_mem_r_en),
 			.MEM_W_EN(id_mem_w_en),
 			.WB_EN(id_wb_en),
-			.single_src(single_src),
-			.if_store_bne(if_store_bne)
+			.is_imm(is_imm),
+			.if_store_bne(if_store_bne),
+			.single_src(single_src)
 	);
 
     Hazard_Detection_Unit hdu(
         .single_src(single_src),
-        .src1(if_instruction_out[25:21]),
+		.src1(if_instruction_out[25:21]),
 		.src2(if_instruction_out[20:16]),
+		        
         .EXE_Dest(id_dest_out),
         .EXE_WB_EN(id_wb_en_out),
         .MEM_Dest(exe_dest_out),
         .MEM_WB_EN(exe_wb_en_out),
         .forwarding_enable(forwarding_enable),
-        .MEM_R_EN(exe_mem_r_en_out),
+        .MEM_R_EN(id_mem_r_en_out),
 
         .hazard_detected(hazard_detected)
     );
+
+    Forwarding_Unit forwarding_unit(
+			.src1(id_src1_out),
+			.src2(id_src2_out),
+			.src3(id_dest_out),
+
+			.MEM_Dest(exe_dest_out),
+			.MEM_WB_EN(exe_wb_en_out),
+
+			.WB_Dest(mem_dest_out),
+			.WB_WB_EN(mem_wb_en_out),
+			.forwarding_enable(forwarding_enable),
+			.if_store_bne(if_store_bne),
+
+			.val1_forward_sel(val1_forward_sel),
+			.val2_forward_sel(val2_forward_sel),
+			.val3_forward_sel(val3_forward_sel)
+	);
 
 	ID_Stage_reg id_stage_reg(
 			.clk(clk),
@@ -446,24 +466,6 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.MEM_R_EN(id_mem_r_en_out),
 			.MEM_W_EN(id_mem_w_en_out),
 			.WB_EN(id_wb_en_out)
-	);
-
-	Forwarding_Unit forwarding_unit(
-			.src1(id_src1_out),
-			.src2(id_src2_out),
-			.src3(id_dest_out),
-
-			.MEM_Dest(exe_dest_out),
-			.MEM_WB_EN(exe_wb_en_out),
-
-			.WB_Dest(mem_dest_out),
-			.WB_WB_EN(mem_wb_en_out),
-			.forwarding_enable(forwarding_enable),
-			.if_store_bne(if_store_bne),
-
-			.val1_forward_sel(val1_forward_sel),
-			.val2_forward_sel(val2_forward_sel),
-			.val3_forward_sel(val3_forward_sel)
 	);
 
 	EXE_Stage exe_stage(

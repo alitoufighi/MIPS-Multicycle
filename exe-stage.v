@@ -24,7 +24,7 @@ module EXE_Stage(
 
     assign flush = Br_taken;
 
-    assign Br_Addr = PC + forwarded_val2;
+    assign Br_Addr = PC + (forwarded_val2 << 2);
 
     assign forwarded_val1 = (val1_forward_sel == 2'b01) ? mem_forward :
                             (val1_forward_sel == 2'b10) ? wb_forward :

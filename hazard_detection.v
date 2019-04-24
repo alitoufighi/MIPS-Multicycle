@@ -1,5 +1,5 @@
+`timescale 1ns/1ns
 module Hazard_Detection_Unit(
-    input single_src,
     input [4:0] src1,
     input [4:0] src2,
 
@@ -11,17 +11,24 @@ module Hazard_Detection_Unit(
     input MEM_WB_EN,
 
     input forwarding_enable, 
+    input single_src,
 
     output reg hazard_detected
 );
     always @(*) begin
-        hazard_detected = 0;
-        if (forwarding_enable) begin
+        if(forwarding_enable) begin
             if(MEM_R_EN & MEM_WB_EN) begin
-                hazard_detected = ((MEM_Dest == src1) | (MEM_Dest == src2));
+                hazard_detected = (src1 == MEM_Dest);
+                if(~single_src) begin
+                    hazard_detected = hazard_detected | (src2 == MEM_Dest);
+                end
+            end
+            else begin
+                hazard_detected = 0;
             end
         end
         else begin
+            hazard_detected = 0;
             if (MEM_WB_EN) begin
                 hazard_detected = (MEM_Dest == src1);
                 if(~single_src)
@@ -34,5 +41,4 @@ module Hazard_Detection_Unit(
             end
         end
     end
-    
 endmodule

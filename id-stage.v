@@ -19,32 +19,27 @@ module ID_Stage(
     output MEM_R_EN,
     output MEM_W_EN,
     output WB_EN,
-    output single_src,
-    output if_store_bne
+    output is_imm,
+    output if_store_bne,
+    output single_src
 );
-    wire is_imm;
     wire [31:0] RegF1, RegF2;
     wire [31:0] sign_extended;
-
-    wire [3:0] _EXE_CMD;
-    wire _MEM_R_EN, _MEM_W_EN, _WB_EN, _is_imm, _single_src;
-    wire [1:0] _Br_type;
-
+	
     Control_unit cu(
             .opcode(Instruction[31:26]),
+            .hazard_detected(hazard_detected),
 
-            .exec_cmd(_EXE_CMD),
-            .mem_r_en(_MEM_R_EN),
-            .mem_w_en(_MEM_W_EN),
-            .wb_en(_WB_EN),
-            .is_imm(_is_imm),
-            .branch_type(_Br_type),
-            .single_src(_single_src),
-            .if_store_bne(_if_store_bne)
+            .exec_cmd(EXE_CMD),
+            .mem_r_en(MEM_R_EN),
+            .mem_w_en(MEM_W_EN),
+            .wb_en(WB_EN),
+            .is_imm(is_imm),
+            .branch_type(Br_type),
+            .if_store_bne(if_store_bne),
+            .single_src(single_src)
     );
 
-    assign {EXE_CMD, MEM_R_EN, MEM_W_EN, WB_EN, is_imm, Br_type, single_src, if_store_bne} = (hazard_detected) ? 12'b0 : 
-                                                                        {_EXE_CMD, _MEM_R_EN, _MEM_W_EN, _WB_EN, _is_imm, _Br_type, _single_src, _if_store_bne};
 
     Registers_file reg_file(
             .clk(clk),
