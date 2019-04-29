@@ -336,7 +336,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 	wire [4:0] wb_wb_dest;
 	wire wb_wb_en;
 	wire is_imm;
-	wire if_store_bne;
+	wire single_src;
+	wire id_if_store_bne, id_if_store_bne_out;
 
 	wire exe_wb_en_out;
 	wire exe_mem_r_en_out;
@@ -399,7 +400,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.MEM_W_EN(id_mem_w_en),
 			.WB_EN(id_wb_en),
 			.is_imm(is_imm),
-			.if_store_bne(if_store_bne),
+			.if_store_bne(id_if_store_bne),
 			.single_src(single_src)
 	);
 
@@ -429,8 +430,9 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.WB_Dest(mem_dest_out),
 			.WB_WB_EN(mem_wb_en_out),
 			.forwarding_enable(forwarding_enable),
-			.if_store_bne(if_store_bne),
-
+			.if_store_bne(id_if_store_bne_out),
+			.MEM_R_EN(exe_mem_r_en_out),
+			
 			.val1_forward_sel(val1_forward_sel),
 			.val2_forward_sel(val2_forward_sel),
 			.val3_forward_sel(val3_forward_sel)
@@ -453,6 +455,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.MEM_R_EN_in(id_mem_r_en),
 			.MEM_W_EN_in(id_mem_w_en),
 			.WB_EN_in(id_wb_en),
+			.if_store_bne_in(id_if_store_bne),
 
 			.Dest(id_dest_out),
 			.Src1(id_src1_out),
@@ -465,7 +468,8 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.EXE_CMD(id_exe_cmd_out),
 			.MEM_R_EN(id_mem_r_en_out),
 			.MEM_W_EN(id_mem_w_en_out),
-			.WB_EN(id_wb_en_out)
+			.WB_EN(id_wb_en_out),
+			.if_store_bne(id_if_store_bne_out)
 	);
 
 	EXE_Stage exe_stage(
@@ -482,6 +486,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.val3_forward_sel(val3_forward_sel),
 			.mem_forward(exe_alu_result_out),
 			.wb_forward(wb_wb_data),
+			.memory_read_value(mem_Mem_read_value),
 
 			.ALU_result(exe_alu_result),
 			.Br_Addr(exe_br_addr),

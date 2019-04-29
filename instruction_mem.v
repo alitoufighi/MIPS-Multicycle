@@ -32,7 +32,7 @@ module Instruction_mem(
     assign instruction_mem[22] = 32'b100101_00001_00100_00000_00000001000;//-- st r4 ,r1 ,8
     assign instruction_mem[23] = 32'b100101_00001_00101_00000_00000001100;//-- st r5 ,r1 ,12
     assign instruction_mem[24] = 32'b100101_00001_00110_00000_00000010000;//-- st r6 ,r1 ,16
-    assign instruction_mem[25] = 32'b100100_00001_01011_00000_00000000100;//-- ld r11 ,r1 ,4//r11=-1456             //!!!! r11=-1546
+    assign instruction_mem[25] = 32'b100100_00001_01011_00000_00000000100;//-- ld r11 ,r1 ,4// r11=-1546
     assign instruction_mem[26] = 32'b100101_00001_01011_00000_00000011000;//-- st r11 ,r1 ,24
     assign instruction_mem[27] = 32'b100101_00001_01001_00000_00000011100;//-- st r9 ,r1 ,28
     assign instruction_mem[28] = 32'b100101_00001_01010_00000_00000100000;//-- st r10 ,r1 ,32
