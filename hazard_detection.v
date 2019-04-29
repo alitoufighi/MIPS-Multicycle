@@ -17,10 +17,10 @@ module Hazard_Detection_Unit(
 );
     always @(*) begin
         if(forwarding_enable) begin
-            if(MEM_R_EN & MEM_WB_EN) begin
-                hazard_detected = (src1 == MEM_Dest);
+            if(MEM_R_EN) begin
+                hazard_detected = (src1 == EXE_Dest);
                 if(~single_src) begin
-                    hazard_detected = hazard_detected | (src2 == MEM_Dest);
+                    hazard_detected = hazard_detected | (src2 == EXE_Dest);
                 end
             end
             else begin

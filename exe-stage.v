@@ -12,6 +12,7 @@ module EXE_Stage(
         input [1:0] val3_forward_sel,
         input [31:0] mem_forward,
         input [31:0] wb_forward,
+        input [31:0] memory_read_value,
 
         output [31:0] ALU_result,
         output [31:0] Br_Addr,
@@ -36,6 +37,7 @@ module EXE_Stage(
 
     assign ST_value = (val3_forward_sel == 2'b01) ? mem_forward :
                       (val3_forward_sel == 2'b10) ? wb_forward :
+                      // (val3_forward_sel == 2'b11) ? memory_read_value :
                       val_src2;
 
     Condition_Check condition_check(

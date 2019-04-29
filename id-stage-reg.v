@@ -15,6 +15,7 @@ module ID_Stage_reg(
     input MEM_R_EN_in,
     input MEM_W_EN_in,
     input WB_EN_in,
+    input if_store_bne_in,
 
     output reg [4:0] Dest,
     output reg [4:0] Src1,
@@ -27,7 +28,8 @@ module ID_Stage_reg(
     output reg [3:0] EXE_CMD,
     output reg MEM_R_EN,
     output reg MEM_W_EN,
-    output reg WB_EN
+    output reg WB_EN,
+    output reg if_store_bne
 );
     always @(posedge clk, posedge rst) begin
         if(rst) begin
@@ -43,6 +45,7 @@ module ID_Stage_reg(
             MEM_R_EN <= 0;
             MEM_W_EN <= 0;
             WB_EN <= 0;
+            if_store_bne <= 0;
         end
         else if (flush) begin
             Dest <= 0;
@@ -57,6 +60,7 @@ module ID_Stage_reg(
             MEM_R_EN <= 0;
             MEM_W_EN <= 0;
             WB_EN <= 0;
+            if_store_bne <= 0;
         end
         else begin
             Dest <= Dest_in;
@@ -71,6 +75,7 @@ module ID_Stage_reg(
             MEM_R_EN <= MEM_R_EN_in;
             MEM_W_EN <= MEM_W_EN_in;
             WB_EN <= WB_EN_in;
+            if_store_bne <= if_store_bne_in;
         end
     end
 endmodule
