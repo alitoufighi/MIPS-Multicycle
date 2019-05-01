@@ -75,4 +75,3 @@ module Instruction_mem(
 
     assign out                 = instruction_mem[shifted_address];
 endmodule
-
