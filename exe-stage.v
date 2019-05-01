@@ -7,46 +7,49 @@ module EXE_Stage(
         input [31:0] val_src2,
         input [1:0] Br_type,
         input [31:0] PC,
+        input [1:0] val1_forward_sel,
+        input [1:0] val2_forward_sel,
+        input [1:0] val3_forward_sel,
+        input [31:0] mem_forward,
+        input [31:0] wb_forward,
+        input [31:0] memory_read_value,
 
         output [31:0] ALU_result,
         output [31:0] Br_Addr,
         output Br_taken,
-        output flush
+        output flush,
+        output [31:0] ST_value
 );
-//     Adder adder(
-//             .val1(PC),
-//             .val2(val2),
-//             .result(Br_Addr)
-//     );
+    wire [31:0] forwarded_val1, forwarded_val2;
 
-//     Condition_Check condition_check(
-//             .val1(val1),
-//             .val2(val_src2),
-//             .branch_type(Br_type),
-//             .branch_taken(Br_taken)
-//     );
-    assign Br_taken = (Br_type==2'b01) ? val1 == 32'b0 :
-                      (Br_type==2'b10) ? val1 != val2 :
-                      (Br_type==2'b11) ? 1'b1 :
-                      1'b0;
-
-    // ALU alu(
-    //         .in1(val1),
-    //         .in2(val2),
-    //         .cmd(EXE_CMD),
-    //         .result(ALU_result)
-    // );
-    assign ALU_result = (EXE_CMD==4'b0000) ? val1 + val2 :
-                        (EXE_CMD==4'b0010) ? val1 - val2 :
-                        (EXE_CMD==4'b0100) ? val1 & val2 :
-                        (EXE_CMD==4'b0101) ? val1 | val2 :
-                        (EXE_CMD==4'b0110) ? ~(val1 | val2) :
-                        (EXE_CMD==4'b0111) ? val1 ^ val2 :
-                        (EXE_CMD==4'b1000) ? val1 << val2 :
-                        (EXE_CMD==4'b1001) ? $signed($signed(val1) >>> val2) :
-                        (EXE_CMD==4'b1010) ? val1 >> val2 :
-                        32'b0;
-
-    assign Br_Addr = PC + val2;
     assign flush = Br_taken;
+
+    assign Br_Addr = PC + (forwarded_val2 << 2);
+
+    assign forwarded_val1 = (val1_forward_sel == 2'b01) ? mem_forward :
+                            (val1_forward_sel == 2'b10) ? wb_forward :
+                            val1;
+
+    assign forwarded_val2 = (val2_forward_sel == 2'b01) ? mem_forward :
+                            (val2_forward_sel == 2'b10) ? wb_forward :
+                            val2;
+
+    assign ST_value = (val3_forward_sel == 2'b01) ? mem_forward :
+                      (val3_forward_sel == 2'b10) ? wb_forward :
+                      // (val3_forward_sel == 2'b11) ? memory_read_value :
+                      val_src2;
+
+    Condition_Check condition_check(
+            .val1(forwarded_val1),
+            .val2(ST_value),
+            .branch_type(Br_type),
+            .branch_taken(Br_taken)
+    );
+
+    ALU alu(
+            .in1(forwarded_val1),
+            .in2(forwarded_val2),
+            .cmd(EXE_CMD),
+            .result(ALU_result)
+    );
 endmodule

@@ -4,6 +4,8 @@ module ID_Stage_reg(
     input flush,
 
     input [4:0] Dest_in,
+    input [4:0] Src1_in,
+    input [4:0] Src2_in,
     input [31:0] Reg2_in,
     input [31:0] Val2_in,
     input [31:0] Val1_in,
@@ -13,8 +15,11 @@ module ID_Stage_reg(
     input MEM_R_EN_in,
     input MEM_W_EN_in,
     input WB_EN_in,
+    input if_store_bne_in,
 
     output reg [4:0] Dest,
+    output reg [4:0] Src1,
+    output reg [4:0] Src2,
     output reg [31:0] Reg2,
     output reg [31:0] Val2,
     output reg [31:0] Val1,
@@ -23,11 +28,14 @@ module ID_Stage_reg(
     output reg [3:0] EXE_CMD,
     output reg MEM_R_EN,
     output reg MEM_W_EN,
-    output reg WB_EN
+    output reg WB_EN,
+    output reg if_store_bne
 );
     always @(posedge clk, posedge rst) begin
         if(rst) begin
             Dest <= 0;
+            Src1 <= 0;
+            Src2 <= 0;
             Reg2 <= 0;
             Val2 <= 0;
             Val1 <= 0;
@@ -37,9 +45,12 @@ module ID_Stage_reg(
             MEM_R_EN <= 0;
             MEM_W_EN <= 0;
             WB_EN <= 0;
+            if_store_bne <= 0;
         end
-		  else if (flush) begin
-				Dest <= 0;
+        else if (flush) begin
+            Dest <= 0;
+            Src1 <= 0;
+            Src2 <= 0;
             Reg2 <= 0;
             Val2 <= 0;
             Val1 <= 0;
@@ -49,9 +60,12 @@ module ID_Stage_reg(
             MEM_R_EN <= 0;
             MEM_W_EN <= 0;
             WB_EN <= 0;
-		  end
+            if_store_bne <= 0;
+        end
         else begin
             Dest <= Dest_in;
+            Src1 <= Src1_in;
+            Src2 <= Src2_in;
             Reg2 <= Reg2_in;
             Val2 <= Val2_in;
             Val1 <= Val1_in;
@@ -61,6 +75,7 @@ module ID_Stage_reg(
             MEM_R_EN <= MEM_R_EN_in;
             MEM_W_EN <= MEM_W_EN_in;
             WB_EN <= WB_EN_in;
+            if_store_bne <= if_store_bne_in;
         end
     end
 endmodule

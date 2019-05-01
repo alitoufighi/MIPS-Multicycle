@@ -11,3 +11,5 @@ output_files/
 *.stp
 test/wlf*
 test/*.wlf
+.vscode/
+
