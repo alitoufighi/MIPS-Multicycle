@@ -7,7 +7,7 @@ module Data_Memory(
 
     output [31:0] read_val
 );
-    reg [31:0] memory [0:63];
+    reg [31:0] memory [0:31];
 
     assign read_val = (MEM_R_EN) ? memory[addr] : 32'b0;
 

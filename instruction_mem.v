@@ -2,7 +2,7 @@ module Instruction_mem(
     input[31:0] addr,
     output[31:0] out
 );
-    wire[31:0] instruction_mem[0: 1023];
+    wire[31:0] instruction_mem[0: 67];
 
     wire[31:0] shifted_address;
     assign shifted_address     = {2'b0, addr[31:2]};

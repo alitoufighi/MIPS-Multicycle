@@ -530,6 +530,14 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 			.mem_freeze(mem_freeze),
 			.Mem_read_value(mem_Mem_read_value)
+
+   		   // .SRAM_DQ(SRAM_DQ),           // SRAM Data bus
+        //     .SRAM_ADDR(SRAM_ADDR),       // SRAM Addr bus
+        //     .SRAM_LB_N(SRAM_LB_N),       // SRAM Low-byte data mask
+        //     .SRAM_UB_N(SRAM_UB_N),       // SRAM High-byte data mask
+        //     .SRAM_WE_N(SRAM_WE_N),       // SRAM write enable
+        //     .SRAM_CE_N(SRAM_CE_N),       // SRAM chip enable
+        //     .SRAM_OE_N(SRAM_OE_N)        // SRAM output enable
 	);
 
 	MEM_Stage_reg mem_stage_register(

@@ -1,6 +1,5 @@
 module Sram_Controller(
     input clk,
-    input rst,
 
     // From Memory Stage
     input wr_en,
@@ -29,16 +28,16 @@ module Sram_Controller(
 
     reg [2:0] counter = 0;
 
-    assign SRAM_DQ = (wr_en) ? ((counter == 1) ? write_data[15:0] : (counter == 2) ? write_data[31:0] : 16'hZZZZ)
-                               : 16'hZZZZ
+    assign SRAM_DQ = (wr_en) ? ((counter == 1) ? write_data[15:0] : (counter == 2) ? write_data[31:16] : {16{1'bz}})
+                               : {16{1'bz}};
 
-    always @ (posedge clk, posedge rst) begin
+    always @ (posedge clk) begin
         ready = 1;
         SRAM_WE_N = 1;
 
         if (rd_en) begin
             ready = 0;
-            counter = counter + 1;
+            counter = counter + 3'b1;
             case (counter)
                 1:
                     begin
@@ -46,7 +45,7 @@ module Sram_Controller(
                     end
                 2:
                     begin
-                        SRAM_ADDR = addr[17:0] + 1;
+                        SRAM_ADDR = addr[17:0] + 18'b1;
                         read_data[15:0] = SRAM_DQ;
                     end
                 3:
@@ -63,7 +62,7 @@ module Sram_Controller(
 
         else if (wr_en) begin
             ready = 0;
-            counter = counter + 1;
+            counter = counter + 3'b1;
 
             case (counter)
                 1:
@@ -73,7 +72,7 @@ module Sram_Controller(
                     end 
                 2:
                     begin
-                        SRAM_ADDR = addr[17:0] + 1;
+                        SRAM_ADDR = addr[17:0] + 18'b1;
                         SRAM_WE_N = 0;
                     end
                 6:
