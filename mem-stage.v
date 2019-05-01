@@ -6,6 +6,7 @@ module MEM_Stage(
         input [31:0] ALU_result_in,
         input [31:0] ST_val,
 
+        output mem_freeze,
         output [31:0] Mem_read_value
 );
     wire [31:0] mem_addr;
@@ -15,6 +16,8 @@ module MEM_Stage(
 //             .addr_out(mem_addr)
 //     );
     assign mem_addr = (ALU_result_in - 1024) >> 2;
+
+    assign mem_freeze = 0;
 
     Data_Memory data_memory(
             .clk(clk),

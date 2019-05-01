@@ -2,6 +2,7 @@ module ID_Stage_reg(
     input clk,
     input rst,
     input flush,
+    input freeze,
 
     input [4:0] Dest_in,
     input [4:0] Src1_in,
@@ -62,6 +63,23 @@ module ID_Stage_reg(
             WB_EN <= 0;
             if_store_bne <= 0;
         end
+
+        else if (freeze) begin
+            Dest <= Dest;
+            Src1 <= Src1;
+            Src2 <= Src2;
+            Reg2 <= Reg2;
+            Val2 <= Val2;
+            Val1 <= Val1;
+            PC_out <= PC_out;
+            Br_type <= Br_type;
+            EXE_CMD <= EXE_CMD;
+            MEM_R_EN <= MEM_R_EN;
+            MEM_W_EN <= MEM_W_EN;
+            WB_EN <= WB_EN;
+            if_store_bne <= if_store_bne;
+        end
+
         else begin
             Dest <= Dest_in;
             Src1 <= Src1_in;

@@ -2,6 +2,7 @@ module IF_Stage_reg(
     input clk,
     input rst,
     input freeze,
+    input mem_freeze,
     input flush,
 
     input [31:0] PC_in,
@@ -19,7 +20,7 @@ module IF_Stage_reg(
             PC <= 0;
             Instruction <= 0;
 		  end
-        else if(freeze) begin
+        else if(freeze | mem_freeze) begin
             PC <= PC;
             Instruction <= Instruction;
         end
