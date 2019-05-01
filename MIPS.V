@@ -307,7 +307,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 	assign clk = CLOCK_50;
 	assign rst = SW[3];
-	assign forwarding_enable = 1'b1;
+	assign forwarding_enable = SW[2];
 	
 	wire [31:0] exe_br_addr;
 	wire exe_br_taken;
