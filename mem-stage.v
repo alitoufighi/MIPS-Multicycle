@@ -10,10 +10,11 @@ module MEM_Stage(
 );
     wire [31:0] mem_addr;
 
-    Address_Mapping address_mapping(
-            .addr_in(ALU_result_in),
-            .addr_out(mem_addr)
-    );
+//     Address_Mapping address_mapping(
+//             .addr_in(ALU_result_in),
+//             .addr_out(mem_addr)
+//     );
+    assign mem_addr = (ALU_result_in - 1024) >> 2;
 
     Data_Memory data_memory(
             .clk(clk),

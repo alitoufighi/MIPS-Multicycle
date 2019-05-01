@@ -53,10 +53,11 @@ module ID_Stage(
             .out2(RegF2)
     );
 
-    SignExtend sign_extend(
-            .in(Instruction[15:0]),
-            .out(sign_extended)
-    );
+//     SignExtend sign_extend(
+//             .in(Instruction[15:0]),
+//             .out(sign_extended)
+//     );
+    assign sign_extended = {{16{Instruction[15]}}, Instruction[15:0]};
 
     assign Val2 = is_imm ? sign_extended : RegF2;
     assign Val1 = RegF1;

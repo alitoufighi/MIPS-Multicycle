@@ -1,8 +1,8 @@
-module Adder(
-    input [31:0] val1,
-    input [31:0] val2,
+// module Adder(
+//     input [31:0] val1,
+//     input [31:0] val2,
 
-    output [31:0] result
-);
-    assign result = val1 + (val2 << 2);
-endmodule
+//     output [31:0] result
+// );
+//     assign result = val1 + (val2 << 2);
+// endmodule
