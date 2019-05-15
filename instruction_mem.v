@@ -25,6 +25,9 @@ module Instruction_mem(
     assign instruction_mem[15] = 32'b001000_00101_00001_00000_00000000000;//-- xor r0 ,r5 ,r1 //r0=0
     assign instruction_mem[16] = 32'b001001_00011_00100_00111_00000000000;//-- sla r7 ,r3 ,r4 //r7=-6184
     assign instruction_mem[17] = 32'b100101_00001_00111_00000_00000010100;//-- st r7 ,r1 ,20
+    //*************************
+    // assign instruction_mem[18] = 32'b000110_00011_00100_0010100000000000; //-- or r5,r3,r4 //r5=-1546  
+    // assign instruction_mem[19] = 32'b100100_00001_00110_00000_00000010100;//-- ld r6 ,r1 ,20
     assign instruction_mem[18] = 32'b001010_00011_00100_01000_00000000000;//-- sll r8 ,r3 ,r4 //r8=-6184
     assign instruction_mem[19] = 32'b001011_00011_00100_01001_00000000000;//-- sra r9 ,r3 ,r4 //r9=-387
     assign instruction_mem[20] = 32'b001100_00011_00100_01010_00000000000;//-- srl r10 ,r3 ,r4 //r10=1073741437
@@ -64,7 +67,7 @@ module Instruction_mem(
     assign instruction_mem[54] = 32'b100100_00001_00100_00000_00000001000;//-- ld ,r4 ,r1 ,8 //r4=1546
     assign instruction_mem[55] = 32'b100100_00001_00100_00000_01000001000;//-- ld ,r4 ,r1 ,520 // after SRAM r4=random number
     assign instruction_mem[56] = 32'b100100_00001_00100_00000_10000001000;//-- ld ,r4 ,r1 ,1023 // after SRAM r4=random number
-    assign instruction_mem[57] = 32'b100100_00001_00101_00000_00000001100;//-- ld ,r5 ,r1 ,12 // r5=1546
+    assign instruction_mem[57] = 32'b100100_00001_00101_00000_00000001100;//-- ld ,r5 ,r1 ,12 //r5=1546
     assign instruction_mem[58] = 32'b100100_00001_00110_00000_00000010000;//-- ld ,r6 ,r1 ,16 //r6=1545
     assign instruction_mem[59] = 32'b100100_00001_00111_00000_00000010100;//-- ld ,r7 ,r1 ,20 //r7=-6184
     assign instruction_mem[60] = 32'b100100_00001_01000_00000_00000011000;//-- ld ,r8 ,r1 ,24 //r8=-1546

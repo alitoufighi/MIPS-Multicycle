@@ -358,6 +358,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.clk(clk),
 			.rst(rst),
 			.freeze(hazard_detected),
+			.mem_freeze(mem_freeze),
 			
 			.Br_taken(exe_br_taken),
 			.Br_Addr(exe_br_addr),
@@ -522,6 +523,7 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 
 	MEM_Stage mem_stage(
 			.clk(clk),
+			.rst(rst),
 
 			.MEM_R_EN_in(exe_mem_r_en_out),
 			.MEM_W_EN_in(exe_mem_w_en_out),
@@ -529,15 +531,15 @@ inout	[35:0]	GPIO_1;					//	GPIO Connection 1
 			.ST_val(ST_val_out),
 
 			.mem_freeze(mem_freeze),
-			.Mem_read_value(mem_Mem_read_value)
+			.Mem_read_value(mem_Mem_read_value),
 
-   		   // .SRAM_DQ(SRAM_DQ),           // SRAM Data bus
-        //     .SRAM_ADDR(SRAM_ADDR),       // SRAM Addr bus
-        //     .SRAM_LB_N(SRAM_LB_N),       // SRAM Low-byte data mask
-        //     .SRAM_UB_N(SRAM_UB_N),       // SRAM High-byte data mask
-        //     .SRAM_WE_N(SRAM_WE_N),       // SRAM write enable
-        //     .SRAM_CE_N(SRAM_CE_N),       // SRAM chip enable
-        //     .SRAM_OE_N(SRAM_OE_N)        // SRAM output enable
+   		   	.SRAM_DQ(SRAM_DQ),           // SRAM Data bus
+            .SRAM_ADDR(SRAM_ADDR),       // SRAM Addr bus
+            .SRAM_LB_N(SRAM_LB_N),       // SRAM Low-byte data mask
+            .SRAM_UB_N(SRAM_UB_N),       // SRAM High-byte data mask
+            .SRAM_WE_N(SRAM_WE_N),       // SRAM write enable
+            .SRAM_CE_N(SRAM_CE_N),       // SRAM chip enable
+            .SRAM_OE_N(SRAM_OE_N)        // SRAM output enable
 	);
 
 	MEM_Stage_reg mem_stage_register(
