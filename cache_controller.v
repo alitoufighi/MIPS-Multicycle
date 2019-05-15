@@ -15,11 +15,9 @@ module cache_controller (
     input sram_ready,
     output reg [17:0] sram_address,
     output reg [31:0] sram_wdata,
-    output write
+    output reg sram_r_en,
+    output reg sram_w_en,
 );
-    // counter for counting clocks
-    reg [2:0] counter;
-
     // data from address
     wire [8:0] tag_addr;
     wire [5:0] index_addr;
@@ -43,12 +41,29 @@ module cache_controller (
 
     // find if we have cache hit or not
     wire hit, hit1, hit2;
-    assign hit1 = MEM_R_EN & (tag1[index_addr] == tag_addr) & valid1[index_addr];
-    assign hit2 = MEM_R_EN & (tag2[index_addr] == tag_addr) & valid2[index_addr];
+    assign hit1 = (tag1[index_addr] == tag_addr) & valid1[index_addr];
+    assign hit2 = (tag2[index_addr] == tag_addr) & valid2[index_addr];
     assign hit = hit1 | hit2;
 
     // find if ready
-    assign ready = hit | sram_ready;
+    assign ready = (~MEM_R_EN & ~MEM_W_EN) | (hit & sram_ready);
+
+    // counter for counting clocks
+    reg [2:0] counter;
+
+    always @ (posedge clk, posedge rst) begin
+        if (rst) begin
+            counter <= 0;
+        end
+
+        else if (sram_r_en | sram_w_en) begin
+            counter <= counter + 1;
+        end
+        
+        if (counter == 6) begin
+            counter <= 0;
+        end
+    end
 
     always @ (posedge clk, posedge rst) begin
         if (rst) begin
@@ -64,35 +79,63 @@ module cache_controller (
         else begin
             if (MEM_R_EN) begin
                 case (hit)
-//                    0:
-                        // not implemented
+                    0:
+                        if(counter == 0) begin
+                            sram_address <= address;
+                            sram_r_en <= 1;
+                        end
+                        else if (sram_ready) begin
+                            sram_r_en <= 0;
+                            case (used[index_addr])
+                                0:
+                                    // writing on 1
+                                    data2[index_addr] <= sram_rdata;
+                                    used[index_addr] <= 1;
+                                1:
+                                    // writing on 0
+                                    data1[index_addr] <= sram_rdata;
+                                    used[index_addr] <= 0;
+                            endcase
+                        end
                     1:
                         if(hit1) begin
                             rdata <= (word_addr == 0) ? data1[index_addr][31:0] : data1[index_addr][63:32];
+                            used[index_addr] <= 0;
                         end
                         else begin
                             rdata <= (word_addr == 0) ? data2[index_addr][31:0] : data2[index_addr][63:32];
+                            used[index_addr] <= 1;
                         end
                 endcase
             end
             else if (MEM_W_EN) begin
-                sram_address <= address;
-                sram_wdata <= wdata;
+                if (counter == 0) begin
+                    sram_address <= address;
+                    sram_wdata <= wdata;
+                    sram_w_en <= 1;
+                end
+                else if (controller == 5) begin
+                    sram_w_en <= 0;
+                end
                 if (hit) begin
                     case (word_addr)
                         0:
                             if (hit1) begin
                                 data1[index_addr][31:0] <= wdata;
+                                used[index_addr] <= 0;
                             end
                             else begin
                                 data2[index_addr][31:0] <= wdata;
+                                used[index_addr] <= 1;
                             end
                         1:
                             if (hit1) begin
                                 data1[index_addr][63:32] <= wdata;
+                                used[index_addr] <= 0;
                             end
                             else begin
                                 data2[index_addr][63:32] <= wdata;
+                                used[index_addr] <= 1;                            
                             end
                     endcase
                 end

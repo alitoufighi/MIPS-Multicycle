@@ -9,7 +9,7 @@ module Sram_Controller(
     input [31:0] write_data,
 
     // To Next STage
-    output reg [31:0] read_data,
+    output reg [63:0] read_data,
 
     // To Freeze Other Stages
     output reg ready,
@@ -45,17 +45,34 @@ module Sram_Controller(
     end
 
     always @(*) begin
-        if (counter == 0) begin
-            SRAM_ADDR                    <= addr;
+        case (counter)
+            0: begin
+                SRAM_ADDR                <= addr;
+            end
+            1: begin
+                SRAM_ADDR                <= addr + 1;
+            end
+            2: begin
+                SRAM_ADDR                <= addr + 2;
+            end
+            3: begin
+                SRAM_ADDR                <= addr + 3;
+            end
+            default: begin
+                SRAM_ADDR                <= SRAM_ADDR;
+            end
+        endcase
+        // if (counter == 0) begin
+        //     SRAM_ADDR                 <= addr;
             
-        end
-        else if (counter == 1) begin
-            SRAM_ADDR                    <= addr + 1;
-        end
+        // end
+        // else if (counter == 1) begin
+        //     SRAM_ADDR                 <= addr + 1;
+        // end
 
-        else begin
-            SRAM_ADDR                    <= SRAM_ADDR;
-        end
+        // else begin
+        //     SRAM_ADDR                 <= SRAM_ADDR;
+        // end
     end
 
     always @(posedge clk, posedge rst) begin 
@@ -86,9 +103,19 @@ module Sram_Controller(
             case (counter)
                 1:
                     begin
-                        read_data[31:16] <= SRAM_DQ;
+                        read_data[63:48] <= SRAM_DQ;
                     end
                 2:
+                    begin
+                        read_data[47:32]  <= SRAM_DQ;
+                    end
+
+                3:
+                    begin
+                        read_data[31:16]  <= SRAM_DQ;
+                    end
+
+                4:
                     begin
                         read_data[15:0]  <= SRAM_DQ;
                     end
