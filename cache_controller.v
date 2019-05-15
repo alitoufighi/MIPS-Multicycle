@@ -58,13 +58,13 @@ module cache_controller (
                 valid1[i] <= 0;
                 valid2[i] <= 0;
             end
-            ready <= 0;
+            //ready <= 0;
             counter <= 0;
         end
         else begin
             if (MEM_R_EN) begin
                 case (hit)
-                    0:
+//                    0:
                         // not implemented
                     1:
                         if(hit1) begin
