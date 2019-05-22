@@ -28,10 +28,10 @@ module Sram_Controller(
     assign SRAM_OE_N                     = 0;
     reg[2:0] counter;
 
-    assign SRAM_DQ                       = (wr_en) ? ((counter == 0) ? write_data[15:0] : ((counter == 1) ? write_data[31:16] : {16{1'bz}}))
+    assign SRAM_DQ = (wr_en) ? ((counter == 0) ? write_data[15:0] : ((counter == 1) ? write_data[31:16] : {16{1'bz}}))
                                : {16{1'bz}};
 
-    assign SRAM_WE_N                     = ~((counter < 2) & wr_en);
+    assign SRAM_WE_N = ~((counter < 2) & wr_en);
 
 
     always @(*) begin
