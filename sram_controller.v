@@ -18,7 +18,7 @@ module Sram_Controller(
     output reg [17:0] SRAM_ADDR,    // SRAM Addr bus
     output SRAM_LB_N,               // SRAM Low-byte data mask
     output SRAM_UB_N,               // SRAM High-byte data mask
-    output SRAM_WE_N,           // SRAM write enable
+    output SRAM_WE_N,               // SRAM write enable
     output SRAM_CE_N,               // SRAM chip enable
     output SRAM_OE_N                // SRAM output enable
 );
@@ -28,10 +28,10 @@ module Sram_Controller(
     assign SRAM_OE_N                     = 0;
     reg[2:0] counter;
 
-    assign SRAM_DQ = (wr_en) ? ((counter == 0) ? write_data[15:0] : ((counter == 1) ? write_data[31:16] : {16{1'bz}}))
+    assign SRAM_DQ = (wr_en) ? ((counter == 1) ? write_data[15:0] : ((counter == 2) ? write_data[31:16] : {16{1'bz}}))
                                : {16{1'bz}};
 
-    assign SRAM_WE_N = ~((counter < 2) & wr_en);
+    assign SRAM_WE_N = ~((counter < 3) & (counter > 0) & wr_en);
 
 
     always @(*) begin
@@ -58,17 +58,6 @@ module Sram_Controller(
                 SRAM_ADDR                <= addr + 3;
             end
         endcase
-        // if (counter == 0) begin
-        //     SRAM_ADDR                 <= addr;
-            
-        // end
-        // else if (counter == 1) begin
-        //     SRAM_ADDR                 <= addr + 1;
-        // end
-
-        // else begin
-        //     SRAM_ADDR                 <= SRAM_ADDR;
-        // end
     end
 
     always @(posedge clk, posedge rst) begin 
@@ -94,26 +83,26 @@ module Sram_Controller(
 
     end
 
-    always @ (posedge clk) begin 
+    always @ (*) begin 
         if (rd_en) begin
             case (counter)
                 1:
                     begin
-                        read_data[31:16] <= SRAM_DQ;
+                        read_data[15:0] <= SRAM_DQ;
                     end
                 2:
                     begin
-                        read_data[15:0]  <= SRAM_DQ;
+                        read_data[31:16]  <= SRAM_DQ;
                     end
 
                 3:
                     begin
-                        read_data[63:48]  <= SRAM_DQ;
+                        read_data[47:32]  <= SRAM_DQ;
                     end
 
                 4:
                     begin
-                        read_data[47:32]  <= SRAM_DQ;
+                        read_data[63:48]  <= SRAM_DQ;
                     end
 
                 default:
