@@ -15,7 +15,7 @@ module Sram_Controller(
     output reg ready,
 
     inout [15:0] SRAM_DQ,           // SRAM Data bus
-    output reg [17:0] SRAM_ADDR,    // SRAM Addr bus
+    output [17:0] SRAM_ADDR,    // SRAM Addr bus
     output SRAM_LB_N,               // SRAM Low-byte data mask
     output SRAM_UB_N,               // SRAM High-byte data mask
     output SRAM_WE_N,               // SRAM write enable
@@ -43,25 +43,31 @@ module Sram_Controller(
             ready                        <= 0;
     end
 
-    always @(*) begin
-        case (counter)
-            0: begin
-                SRAM_ADDR                <= addr;
-            end
-            1: begin
-                SRAM_ADDR                <= addr + 1;
-            end
-            2: begin
-                SRAM_ADDR                <= addr + 2;
-            end
-            3: begin
-                SRAM_ADDR                <= addr + 3;
-            end
-				default: begin
-					SRAM_ADDR <= SRAM_ADDR;
-				end
-        endcase
-    end
+    assign SRAM_ADDR = (counter==0) ? addr :
+                       (counter==1) ? addr + 1 :
+                       (counter==2) ? addr + 2 :
+                       (counter==3) ? addr + 3 :
+                       addr;
+
+    // always @(*) begin
+    //     case (counter)
+    //         0: begin
+    //             SRAM_ADDR                <= addr;
+    //         end
+    //         1: begin
+    //             SRAM_ADDR                <= addr + 1;
+    //         end
+    //         2: begin
+    //             SRAM_ADDR                <= addr + 2;
+    //         end
+    //         3: begin
+    //             SRAM_ADDR                <= addr + 3;
+    //         end
+				// default: begin
+				// 	SRAM_ADDR <= SRAM_ADDR;
+				// end
+    //     endcase
+    // end
 
     always @(posedge clk, posedge rst) begin 
         if (rst) begin
@@ -86,26 +92,34 @@ module Sram_Controller(
 
     end
 
+
     always @ (*) begin
-		  read_data <= read_data;
         if (rd_en) begin
             case (counter)
                 0:
                     begin
                         read_data[15:0] <= SRAM_DQ;
+                        // read_data[63:16] <= read_data[63:16];
                     end
                 1:
                     begin
+                        // read_data[15:0] <= read_data[15:0];
                         read_data[31:16]  <= SRAM_DQ;
+                        // read_data[63:32] <= read_data[63:32];
                     end
 
                 2:
                     begin
+                        // read_data[31:0] <= read_data[31:0];
                         read_data[47:32]  <= SRAM_DQ;
+                        // read_data[63:48] <= read_data[63:48];
+
                     end
 
                 3:
                     begin
+                        // read_data[47:0] <= read_data[47:0];
+
                         read_data[63:48]  <= SRAM_DQ;
                     end
 
@@ -114,6 +128,9 @@ module Sram_Controller(
                         read_data        <= read_data;
                     end
             endcase
+        end
+        else begin
+            read_data <= read_data;
         end
 
     end

@@ -23,9 +23,9 @@ module Cache_Controller (
     wire [5:0] index_addr;
     wire word_addr;
 
-    assign word_addr  = address[2];
-    assign tag_addr   = address[17:9];
-    assign index_addr = address[8:3];
+    assign word_addr  = address[1];
+    assign tag_addr   = address[16:8];
+    assign index_addr = address[7:2];
 
     // registers for cache
     reg [63:0] used;
@@ -48,7 +48,7 @@ module Cache_Controller (
     // read data from cache or sram
 	assign rdata = (hit0) ? ((word_addr == 0) ? data0[index_addr][31:0] : data0[index_addr][63:32]) :
 	               ((hit1) ? ((word_addr == 0) ? data1[index_addr][31:0] : data1[index_addr][63:32]) : 
-	               (word_addr == 0) ? sram_rdata[31:0] : sram_rdata[63:32]);
+	               ((word_addr == 0) ? sram_rdata[31:0] : sram_rdata[63:32]));
 
 	assign ready = MEM_W_EN & (sram_ready) | MEM_R_EN & (hit | sram_ready) | ~(MEM_R_EN | MEM_W_EN);
 
@@ -57,7 +57,7 @@ module Cache_Controller (
 
     assign sram_w_en = MEM_W_EN;
     assign sram_r_en = must_read_sram;
-    assign sram_address = address << 1;
+    assign sram_address = sram_r_en ? ({ address >> 2, 2'b0 }) : sram_w_en ? address : address;
     assign sram_wdata = (MEM_W_EN) ? wdata : 32'bzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz;
 
 	always @(posedge clk or posedge rst) begin
@@ -69,6 +69,8 @@ module Cache_Controller (
                 valid1[i] <= 0;
                 data0[i] <= 0;
                 data1[i] <= 0;
+                tag0[i] <= 0;
+                tag1[i] <= 0;
 			end
 		end
 		else begin
