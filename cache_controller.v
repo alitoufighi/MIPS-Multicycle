@@ -57,7 +57,7 @@ module Cache_Controller (
 
     assign sram_w_en = MEM_W_EN;
     assign sram_r_en = must_read_sram;
-    assign sram_address = address;
+    assign sram_address = address << 1;
     assign sram_wdata = (MEM_W_EN) ? wdata : 32'bzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz;
 
 	always @(posedge clk or posedge rst) begin
@@ -67,8 +67,8 @@ module Cache_Controller (
 				used[i] <= 0;
                 valid0[i] <= 0;
                 valid1[i] <= 0;
-                data0[i] <= i;
-                data1[i] <= i;
+                data0[i] <= 0;
+                data1[i] <= 0;
 			end
 		end
 		else begin
@@ -98,7 +98,7 @@ module Cache_Controller (
 				// 	else begin
                 //         data1[index_addr][63:32] <= wdata;
 				// 	end
-				// end
+				end
 			end
 
 			if (MEM_R_EN & sram_ready) begin
