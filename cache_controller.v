@@ -74,29 +74,31 @@ module Cache_Controller (
 		else begin
 			if (MEM_W_EN & sram_ready) begin // vaghti sram ready 1 mishe mem_w_en 0 mishe!
 				if (hit0) begin
-                    used[index_addr] <= 0;
-                    valid0[index_addr] <= 1;
-                    tag0[index_addr] <= tag_addr;
+                    valid0[index_addr] <= 0;
+                    // used[index_addr] <= 0;
+                    // valid0[index_addr] <= 1;
+                    // tag0[index_addr] <= tag_addr;
 
-					if (word_addr == 0) begin
-                        data0[index_addr][31:0] <= wdata;
-					end
-					else begin
-                        data0[index_addr][63:32] <= wdata;
-					end
+					// if (word_addr == 0) begin
+                    //     data0[index_addr][31:0] <= wdata;
+					// end
+					// else begin
+                    //     data0[index_addr][63:32] <= wdata;
+					// end
 				end
 				else if (hit1) begin
-                    used[index_addr] <= 1;
-                    valid1[index_addr] <= 1;
-                    tag1[index_addr] <= tag_addr;
+                    valid1[index_addr] <= 0;
+                //     used[index_addr] <= 1;
+                //     valid1[index_addr] <= 1;
+                //     tag1[index_addr] <= tag_addr;
 
-					if (word_addr == 0) begin
-                        data1[index_addr][31:0] <= wdata;
-					end
-					else begin
-                        data1[index_addr][63:32] <= wdata;
-					end
-				end
+				// 	if (word_addr == 0) begin
+                //         data1[index_addr][31:0] <= wdata;
+				// 	end
+				// 	else begin
+                //         data1[index_addr][63:32] <= wdata;
+				// 	end
+				// end
 			end
 
 			if (MEM_R_EN & sram_ready) begin
