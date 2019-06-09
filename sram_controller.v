@@ -28,10 +28,10 @@ module Sram_Controller(
     assign SRAM_OE_N                     = 0;
     reg[2:0] counter;
 
-    assign SRAM_DQ = (wr_en) ? ((counter == 1) ? write_data[15:0] : ((counter == 2) ? write_data[31:16] : {16{1'bz}}))
-                               : {16{1'bz}};
+    assign SRAM_DQ = (wr_en) ? ((counter == 0) ? write_data[15:0] : ((counter == 1) ? write_data[31:16] : 16'bzzzzzzzzzzzzzzzz))
+                               : 16'bzzzzzzzzzzzzzzzz;
 
-    assign SRAM_WE_N = ~((counter < 3) & (counter > 0) & wr_en);
+    assign SRAM_WE_N = ~((counter < 2) & wr_en);
 
 
     always @(*) begin
@@ -57,6 +57,9 @@ module Sram_Controller(
             3: begin
                 SRAM_ADDR                <= addr + 3;
             end
+				default: begin
+					SRAM_ADDR <= SRAM_ADDR;
+				end
         endcase
     end
 
@@ -83,24 +86,25 @@ module Sram_Controller(
 
     end
 
-    always @ (*) begin 
+    always @ (*) begin
+		  read_data <= read_data;
         if (rd_en) begin
             case (counter)
-                1:
+                0:
                     begin
                         read_data[15:0] <= SRAM_DQ;
                     end
-                2:
+                1:
                     begin
                         read_data[31:16]  <= SRAM_DQ;
                     end
 
-                3:
+                2:
                     begin
                         read_data[47:32]  <= SRAM_DQ;
                     end
 
-                4:
+                3:
                     begin
                         read_data[63:48]  <= SRAM_DQ;
                     end

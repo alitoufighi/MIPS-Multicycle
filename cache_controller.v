@@ -36,8 +36,8 @@ module Cache_Controller (
     reg [8:0] tag0 [0: 63];
     reg [8:0] tag1 [0: 63];
 
-    reg [63:0] data0 [63:0];
-    reg [63:0] data1 [63:0];
+    reg [63:0] data0 [0:63];
+    reg [63:0] data1 [0:63];
 
     // find if we have cache hit or not
     wire hit, hit0, hit1;
@@ -47,8 +47,8 @@ module Cache_Controller (
 
     // read data from cache or sram
 	assign rdata = (hit0) ? ((word_addr == 0) ? data0[index_addr][31:0] : data0[index_addr][63:32]) :
-	               (hit1) ? ((word_addr == 0) ? data1[index_addr][31:0] : data1[index_addr][63:32]) : 
-	               (word_addr == 0) ? sram_rdata[31:0] : sram_rdata[63:32];
+	               ((hit1) ? ((word_addr == 0) ? data1[index_addr][31:0] : data1[index_addr][63:32]) : 
+	               (word_addr == 0) ? sram_rdata[31:0] : sram_rdata[63:32]);
 
 	assign ready = MEM_W_EN & (sram_ready) | MEM_R_EN & (hit | sram_ready) | ~(MEM_R_EN | MEM_W_EN);
 
@@ -67,6 +67,8 @@ module Cache_Controller (
 				used[i] <= 0;
                 valid0[i] <= 0;
                 valid1[i] <= 0;
+                data0[i] <= i;
+                data1[i] <= i;
 			end
 		end
 		else begin
@@ -76,7 +78,7 @@ module Cache_Controller (
                     valid0[index_addr] <= 1;
                     tag0[index_addr] <= tag_addr;
 
-					if (word_addr == 1) begin
+					if (word_addr == 0) begin
                         data0[index_addr][31:0] <= wdata;
 					end
 					else begin
@@ -88,7 +90,7 @@ module Cache_Controller (
                     valid1[index_addr] <= 1;
                     tag1[index_addr] <= tag_addr;
 
-					if (word_addr == 1) begin
+					if (word_addr == 0) begin
                         data1[index_addr][31:0] <= wdata;
 					end
 					else begin
@@ -106,14 +108,16 @@ module Cache_Controller (
                 end
                 else begin
                     if (used[index_addr] == 1) begin
-                        data0[index_addr] <= rdata;
+                        data0[index_addr] <= sram_rdata;
                         tag0[index_addr] <= tag_addr;
                         used[index_addr] <= 0;
+                        valid0[index_addr] <= 1;
                     end
                     else begin
-                        data1[index_addr] <= rdata;
+                        data1[index_addr] <= sram_rdata;
                         tag1[index_addr] <= tag_addr;
                         used[index_addr] <= 1;
+                        valid1[index_addr] <= 1;
                     end
                 end
 			end
